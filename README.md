@@ -1,10 +1,12 @@
 # ossify
 
-Ossify, your Spotify listening companion eases *tedium* of music discovery and recollection.
-The idea is to automate the RJ experience.
+Ossify, your Spotify listening companion eases the *tedium* of music discovery and recollection.
+The idea is to automate the RJ experience and keep track of what you had listened to.
 
-Change songs after <X> seconds, and get artist and song information via your speakers.
-Freeing up your hands to perform other useless activities, or sleep.
+Change songs after <X> seconds, get artist and song information via your speakers.
+
+PS: I rarely listen to entire songs when disocvering new music.
+Might not be as useful depending on your listening style.
 
 # Prerequisites
 - https://github.com/hnarayanan/shpotify
