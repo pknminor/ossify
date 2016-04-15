@@ -3,9 +3,9 @@
 Ossify, your Spotify listening companion eases the *tedium* of music discovery and recollection.
 The idea is to automate the RJ experience and keep track of what you had listened to.
 
-Change songs after <X> seconds, get artist and song information via your speakers.
+Change songs after *X* seconds, get artist and song information via your speakers.
 
-PS: I rarely listen to entire songs when disocvering new music.
+PS: I rarely listen to entire songs when discovering new music.
 Might not be as useful depending on your listening style.
 
 # Prerequisites
