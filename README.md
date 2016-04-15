@@ -1,10 +1,10 @@
 # ossify
 
 # Prerequisites
-https://github.com/hnarayanan/shpotify
-OSX El Capitan(10.11.2)
-Spotify(1.0.26.132.ga4e3ccee)
-Bash(3.2)
+- https://github.com/hnarayanan/shpotify
+- OSX El Capitan(10.11.2)
+- Spotify(1.0.26.132.ga4e3ccee)
+- Bash(3.2)
 
 # Setup instructions
 
