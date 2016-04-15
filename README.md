@@ -5,8 +5,8 @@ The idea is to automate the RJ(Radio Jockey) experience and keep track of what y
 
 Change songs after *X* seconds, get artist and song information via audio.
 
-PS: I rarely listen to entire songs when discovering new music.
-Might not be as useful depending on your listening style.
+PS: I rarely listen to an entire song when discovering new music.
+Might not be as useful for you depending on your listening style.
 
 # Prerequisites
 - https://github.com/hnarayanan/shpotify
@@ -40,8 +40,6 @@ Might not be as useful depending on your listening style.
 >      <quit-after>      = 0, Keep listening to the music..
 >                          1, Quit after <number-of-songs>
 >      <log-location>    = Logfile path, default is HOME/ossify_logs
->
->
 >
 
 ## Have fun!
