@@ -1,9 +1,9 @@
 # ossify
 
-Ossify, your Spotify listening companion eases the *tedium* of music discovery and recollection.
+Ossify, your Spotify listening companion, eases the *tedium* of music discovery and recollection.
 The idea is to automate the RJ experience and keep track of what you had listened to.
 
-Change songs after *X* seconds, get artist and song information via your speakers.
+Change songs after *X* seconds, get artist and song information via audio.
 
 PS: I rarely listen to entire songs when discovering new music.
 Might not be as useful depending on your listening style.
@@ -15,15 +15,15 @@ Might not be as useful depending on your listening style.
 - Bash(3.2)
 
 # Instructions
-1. Add this to your aliases, bashrc:
-source ossify.bash
+1. Add this to your aliases or bashrc:
 
+ossify.bash
 
 2. Usage
 
-2.1 Start a playlist or an artist page on Spotify GUI.
+- Start a playlist or an artist page on the Spotify GUI.
 
-2.2 Run ossify from the terminal(for the time being).
+- Launch ossify from the terminal.
 
 >  For example,
 >  ossify ramones 45 30 3 0 ~/ossify_logs

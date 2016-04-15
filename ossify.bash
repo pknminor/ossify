@@ -31,7 +31,7 @@ function ossify() {
   fi
 
   OSSIFY_TIMESTAMP=`date +"%m-%d-%y-%T"`
-  OSSIFY_OUT_FILE="${OSSIFY_OUT_LOC}/OSSIFY_${OSSIFY_PLAYLIST_NAME}_${OSSIFY_TIMESTAMP}.txt"
+  OSSIFY_OUT_FILE="${OSSIFY_OUT_LOC}/${OSSIFY_PLAYLIST_NAME}_${OSSIFY_TIMESTAMP}.txt"
   echo "OSSIFY LOGFILE" > ${OSSIFY_OUT_FILE}
 
   # crude way to match gui
