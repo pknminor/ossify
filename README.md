@@ -15,11 +15,11 @@ Might not be as useful depending on your listening style.
 - Bash(3.2)
 
 # Instructions
-1. Add this to your aliases or bashrc:
+## Source the following bash script:
 
 ossify.bash
 
-2. Usage
+## Usage
 
 - Start a playlist or an artist page on the Spotify GUI.
 

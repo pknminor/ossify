@@ -1,3 +1,5 @@
+#!/bin/bash
+
 function ossify_theo_said() {
   echo "THEO_SAYS: $OSSIFY_THEO_SAYS"
   say $OSSIFY_THEO_SAYS
