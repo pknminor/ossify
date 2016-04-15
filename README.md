@@ -18,11 +18,19 @@ Might not be as useful depending on your listening style.
 1. Add this to your aliases, bashrc:
 source ossify.bash
 
-2. Use the bash function "ossify"
+
+2. Usage
+
+2.1 Start a playlist or an artist page on Spotify GUI.
+
+2.2 Run ossify from the terminal(for the time being).
+
+>  For example,
+>  ossify ramones 45 30 3 0
 >
 >  Usage:
 >
->      ossify <playlist-name> <time-per-song> <number-of-songs> <theo-mode, aka your RJ>
+>      ossify <playlist-name> <time-per-song> <number-of-songs> <theo-mode, aka your RJ> <quit-after>
 >
 >      <playlist-name>   = Playlist name
 >      <time-per-song>   = Recommended between 0-45
