@@ -4,6 +4,7 @@
 https://github.com/hnarayanan/shpotify
 OSX El Capitan(10.11.2)
 Spotify(1.0.26.132.ga4e3ccee)
+Bash(3.2)
 
 # Setup instructions
 
@@ -22,5 +23,7 @@ source ossify.bash
 >      <theo-mode>       = 0, Classic Mode, Theo speaks before the song
 >                          1, Armin Mode, Theo speaks at the begining of the song
 >                          2, FYI Mode, Theo speaks at the end of the play
-
+>      <quit-afte>       = 0, Keep listening to the music..
+>                          1, Quit after the plays
+>
 3. Have fun!
