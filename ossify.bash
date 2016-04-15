@@ -29,6 +29,16 @@ function ossify() {
     OSSIFY_OUT_LOC="${HOME}/ossify_logs"
   fi
 
+  if [ $OSSIFY_DEBUG ]
+  then
+    echo "OSSIFY_PLAYLIST_NAME $OSSIFY_PLAYLIST_NAME"
+    echo "OSSIFY_SKIP_TIME $OSSIFY_SKIP_TIME"
+    echo "OSSIFY_NUM_SONGS $OSSIFY_NUM_SONGS"
+    echo "OSSIFY_THEO_MODE $OSSIFY_THEO_MODE"
+    echo "OSSIFY_QUIT_AFTER $OSSIFY_QUIT_AFTER"
+    echo "OSSIFY_OUT_LOC $OSSIFY_OUT_LOC"
+  fi
+
   # output logs
   OSSIFY_TIMESTAMP=`date +"%m-%d-%y-%T"`
   OSSIFY_OUT_FILE="${OSSIFY_OUT_LOC}/${OSSIFY_PLAYLIST_NAME}_${OSSIFY_TIMESTAMP}.txt"
@@ -38,6 +48,8 @@ function ossify() {
     exit 2
   else
     touch ${OSSIFY_OUT_FILE}
+    echo "Creating file ${OSSIFY_OUT_FILE}"
+
     if [ ! -e $OSSIFY_OUT_FILE ]
     then
       echo " Error: Unable to create ${OSSIFY_OUT_FILE}! Exiting.."
@@ -64,7 +76,7 @@ function ossify() {
     OSSIFY_THEO_SAYS="${OSSIFY_SONGT} by ${OSSIFY_AARTIST}"
 
     # dbg print
-    if [ ! -z $OSSIFY_DEBUG ]
+    if [ $OSSIFY_DEBUG ]
     then
       echo "BASH DBG"
       echo "SKIP_TIME = $OSSIFY_SKIP_TIME"
