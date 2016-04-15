@@ -46,7 +46,7 @@ function ossify() {
   echo "OSSIFY LOGFILE" > ${OSSIFY_OUT_FILE}
 
   # crude way to match gui
-  OSSIFY_SKIP_TIME_ADJ=`expr $OSSIFY_SKIP_TIME - 3`
+  OSSIFY_SKIP_TIME_ADJ=`expr $OSSIFY_SKIP_TIME - 1`
 
   for VAR in `seq 1 ${OSSIFY_NUM_SONGS}`
   do
