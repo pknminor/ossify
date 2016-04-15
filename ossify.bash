@@ -10,7 +10,6 @@ function ossify_fade_in() {
 function ossify_theo_sign_off() {
   THEO_SAYS="Theo bidding off, Have fun!"
   echo "THEO_SAYS: $THEO_SAYS"
-  spotify vol 30
   say $THEO_SAYS
 }
 
