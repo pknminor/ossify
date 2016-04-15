@@ -1,13 +1,18 @@
 # ossify
 
+Ossify, your Spotify listening companion eases *tedium* of music discovery and recollection.
+The idea is to automate the RJ experience.
+
+Change songs after <X> seconds, and get artist and song information via your speakers.
+Freeing up your hands to perform other useless activities, or sleep.
+
 # Prerequisites
 - https://github.com/hnarayanan/shpotify
 - OSX El Capitan(10.11.2)
 - Spotify(1.0.26.132.ga4e3ccee)
 - Bash(3.2)
 
-# Setup instructions
-
+# Instructions
 1. Add this to your aliases, bashrc:
 source ossify.bash
 
