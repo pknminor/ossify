@@ -2,8 +2,6 @@
 
 # Prerequisites
 https://github.com/hnarayanan/shpotify
-
-Only tested on,
 OSX El Capitan(10.11.2)
 Spotify(1.0.26.132.ga4e3ccee)
 
