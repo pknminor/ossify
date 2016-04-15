@@ -13,15 +13,14 @@ Might not be as useful depending on your listening style.
 - OSX El Capitan(10.11.2)
 - Spotify(1.0.26.132.ga4e3ccee)
 - Bash(3.2)
+- Optional: NoSleep(http://www.macupdate.com/app/mac/37991/nosleep)
 
 # Instructions
-## Source the following bash script:
-
-ossify.bash
+## Source the bash script "ossify.bash"
 
 ## Usage
 
-- Start a playlist or an artist page on the Spotify GUI.
+- Start a playlist or an artist page on the Spotify GUI, with or without shuffle.
 
 - Launch ossify from the terminal.
 
@@ -30,7 +29,7 @@ ossify.bash
 >
 >  Usage:
 >
->      ossify <playlist-name> <time-per-song> <number-of-songs> <theo-mode, aka your RJ> <quit-after>
+>      ossify <playlist-name> <time-per-song> <number-of-songs> <theo-mode, aka your RJ> <quit-after> <log-location>
 >
 >      <playlist-name>   = Playlist name
 >      <time-per-song>   = Recommended between 0-45
@@ -40,8 +39,9 @@ ossify.bash
 >                          3, FYI Mode, Theo speaks at the end of play(s)
 >      <quit-after>      = 0, Keep listening to the music..
 >                          1, Quit after <number-of-songs>
->      <log-location>    = Logfile path
+>      <log-location>    = Logfile path, default is HOME/ossify_logs
 >
 >
 >
-3. Have fun!
+
+## Have fun!
