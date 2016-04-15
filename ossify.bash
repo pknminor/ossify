@@ -1,52 +1,68 @@
 function ossify_theo_said() {
-  echo "THEO_SAYS: $THEO_SAYS"
-  say $THEO_SAYS
+  echo "THEO_SAYS: $OSSIFY_THEO_SAYS"
+  say $OSSIFY_THEO_SAYS
 }
 
 function ossify_theo_sign_off() {
-  THEO_SAYS="Theo bidding off!"
+  OSSIFY_THEO_SAYS="Theo bidding off!"
   ossify_theo_said
 }
 
 function ossify() {
-  PLAYLIST_NAME=$1
-  SKIP_TIME=$2
-  NUM_SONGS=$3
-  THEO_MODE=$4
-  QUIT_AFTER=$5
-  if [ -z $SKIP_TIME ] || [ -z $PLAYLIST_NAME ] || [ -z $NUM_SONGS ] || [ -z $THEO_MODE ]
+  OSSIFY_PLAYLIST_NAME=$1
+  OSSIFY_SKIP_TIME=$2
+  OSSIFY_NUM_SONGS=$3
+  OSSIFY_THEO_MODE=$4
+  OSSIFY_QUIT_AFTER=$5
+  OSSIFY_OUT_LOC=$6
+  if [ -z $OSSIFY_SKIP_TIME ] || [ -z $OSSIFY_PLAYLIST_NAME ] || [ -z $OSSIFY_NUM_SONGS ] || [ -z $OSSIFY_THEO_MODE ] || [ -z $OSSIFY_QUIT_AFTER ] || [ -z $OSSIFY_OUT_LOC ]
   then
-    PLAYLIST_NAME="UNKNOWN_ARTIST"
-    SKIP_TIME=30
-    NUM_SONGS=56
-    THEO_MODE=1
+    OSSIFY_PLAYLIST_NAME="UNKNOWN_ARTIST"
+    OSSIFY_SKIP_TIME=30
+    OSSIFY_NUM_SONGS=56
+    OSSIFY_THEO_MODE=1
+    OSSIFY_QUIT_AFTER=0
+    OSSIFY_OUT_LOC="~/ossify_logs"
   fi
 
-  #
-  SKIP_TIME_ADJ=`expr $SKIP_TIME - 2`
+  if [ ! -d "$OSSIFY_OUT_LOC" ]; then
+    echo " Error: Output directory doesn't exist! Exiting.."
+    exit 2
+  fi
 
-  for VAR in `seq 1 ${NUM_SONGS}`
+  OSSIFY_TIMESTAMP=`date +"%m-%d-%y-%T"`
+  OSSIFY_OUT_FILE="${OSSIFY_OUT_LOC}/OSSIFY_${OSSIFY_PLAYLIST_NAME}_${OSSIFY_TIMESTAMP}.txt"
+  echo "OSSIFY LOGFILE" > ${OSSIFY_OUT_FILE}
+
+  # crude way to match gui
+  OSSIFY_SKIP_TIME_ADJ=`expr $OSSIFY_SKIP_TIME - 2`
+
+  for VAR in `seq 1 ${OSSIFY_NUM_SONGS}`
   do
 
+    # pause current play at start
     spotify pause
 
+    # next song
     spotify next
-    spotify play
 
-    #
-    SONGT=`spotify info |  sed -n 's/Track:[[:space:]]*\(.*\)/\1/p'`
-    AARTIST=`spotify info | sed -n 's/Album Artist:[[:space:]]*\(.*\)/\1/p'`
-    THEO_SAYS="${SONGT} by ${AARTIST}"
+    # get info
+    OSSIFY_SONGT=`spotify info |  sed -n 's/Track:[[:space:]]*\(.*\)/\1/p'`
+    OSSIFY_AARTIST=`spotify info | sed -n 's/Album Artist:[[:space:]]*\(.*\)/\1/p'`
+    OSSIFY_THEO_SAYS="${OSSIFY_SONGT} by ${OSSIFY_AARTIST}"
 
-    #
-    echo "BASH DBG"
-    echo "SKIP_TIME = $SKIP_TIME"
-    echo "AARTIST = $AARTIST"
-    echo "THEO_MODE = $THEO_MODE"
-    echo "BASH DBG"
+    # dbg print
+    if [ ! -z $OSSIFY_DEBUG ]
+    then
+      echo "BASH DBG"
+      echo "SKIP_TIME = $OSSIFY_SKIP_TIME"
+      echo "AARTIST   = $OSSIFY_AARTIST"
+      echo "THEO_MODE = $OSSIFY_THEO_MODE"
+      echo "BASH DBG"
+    fi
 
-    # classic mode
-    if [ $THEO_MODE -eq 1 ]
+    # classic mode, before play
+    if [ $OSSIFY_THEO_MODE -eq 1 ]
     then
       spotify pause
       ossify_theo_said
@@ -55,31 +71,32 @@ function ossify() {
     # START
     spotify play
 
-    # armin mode
-    if [ $THEO_MODE -eq 2 ]
+    # armin mode, overlapped beginning
+    if [ $OSSIFY_THEO_MODE -eq 2 ]
     then
       sleep 6s
       ossify_theo_said
     fi
 
-    # logging debug mode
-    echo "SONG #${VAR}"                  | tee -a ${PLAYLIST_NAME}_${NUM_SONGS}songs_${SKIP_TIME}seconds_info.txt
-    spotify share                        | tee -a ${PLAYLIST_NAME}_${NUM_SONGS}songs_${SKIP_TIME}seconds_info.txt
-    spotify info                         | tee -a ${PLAYLIST_NAME}_${NUM_SONGS}songs_${SKIP_TIME}seconds_info.txt
-    echo "----------------"              | tee -a ${PLAYLIST_NAME}_${NUM_SONGS}songs_${SKIP_TIME}seconds_info.txt
+    # keep track of what you listened to
+    echo "SONG #${VAR}"                  >> $OSSIFY_OUT_FILE
+    spotify share                        >> $OSSIFY_OUT_FILE
+    spotify info                         >> $OSSIFY_OUT_FILE
+    echo "----------------"              >> $OSSIFY_OUT_FILE
 
-    sleep ${SKIP_TIME}s
+    # song play
+    sleep ${OSSIFY_SKIP_TIME}s
 
     # fyi mode
-    if [ $THEO_MODE -eq 3 ]
+    if [ $OSSIFY_THEO_MODE -eq 3 ]
     then
       spotify pause
-      THEO_SAYS="For Your Information... that was ${THEO_SAYS}"
+      OSSIFY_THEO_SAYS="For Your Information... that was ${OSSIFY_THEO_SAYS}"
       ossify_theo_said
     fi
 
   done
-  if [ $QUIT_AFTER -eq 1 ]
+  if [ $OSSIFY_QUIT_AFTER -eq 1 ]
   then
     ossify_theo_sign_off
     spotify quit

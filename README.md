@@ -26,7 +26,7 @@ source ossify.bash
 2.2 Run ossify from the terminal(for the time being).
 
 >  For example,
->  ossify ramones 45 30 3 0
+>  ossify ramones 45 30 3 0 ~/ossify_logs
 >
 >  Usage:
 >
@@ -40,5 +40,8 @@ source ossify.bash
 >                          3, FYI Mode, Theo speaks at the end of play(s)
 >      <quit-after>      = 0, Keep listening to the music..
 >                          1, Quit after <number-of-songs>
+>      <log-location>    = Logfile path
+>
+>
 >
 3. Have fun!
