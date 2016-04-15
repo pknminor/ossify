@@ -46,8 +46,7 @@ function ossify() {
   echo "OSSIFY LOGFILE" > ${OSSIFY_OUT_FILE}
 
   # crude way to match gui
-  #OSSIFY_SKIP_TIME_ADJ=`expr $OSSIFY_SKIP_TIME - 2`
-  OSSIFY_SKIP_TIME_ADJ=$OSSIFY_SKIP_TIME
+  OSSIFY_SKIP_TIME_ADJ=`expr $OSSIFY_SKIP_TIME - 3`
 
   for VAR in `seq 1 ${OSSIFY_NUM_SONGS}`
   do
@@ -57,6 +56,7 @@ function ossify() {
 
     # next song
     spotify next
+    spotify pause
 
     # get info
     OSSIFY_SONGT=`spotify info |  sed -n 's/Track:[[:space:]]*\(.*\)/\1/p'`
@@ -76,7 +76,6 @@ function ossify() {
     # classic mode, before play
     if [ $OSSIFY_THEO_MODE -eq 1 ]
     then
-      spotify pause
       ossify_theo_said
     fi
 
