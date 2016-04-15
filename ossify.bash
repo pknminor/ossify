@@ -25,8 +25,8 @@ function ossify() {
   #
   SKIP_TIME_ADJ=`expr $SKIP_TIME - 2`
 
-	for VAR in `seq 1 ${NUM_SONGS}`
-	do
+  for VAR in `seq 1 ${NUM_SONGS}`
+  do
 
     spotify pause
 
