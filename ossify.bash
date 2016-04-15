@@ -10,6 +10,13 @@ function ossify_theo_sign_off() {
   ossify_theo_said
 }
 
+function ossify_pauses() {
+  for VAR in `seq 1 3`
+  do
+    spotify pause
+  done
+}
+
 function ossify() {
   # args
   OSSIFY_PLAYLIST_NAME=$1
@@ -70,6 +77,7 @@ function ossify() {
   do
 
     # next song
+    ossify_pauses &
     spotify next
     spotify pause
 
@@ -114,6 +122,7 @@ function ossify() {
     echo "--------------------------"    >> $OSSIFY_OUT_FILE
     spotify info                         >> $OSSIFY_OUT_FILE
     echo "--------------------------"    >> $OSSIFY_OUT_FILE
+    echo "----END-OF-TRACK----------"    >> $OSSIFY_OUT_FILE
 
     # song play
     sleep ${OSSIFY_SKIP_TIME_ADJ}s
@@ -129,7 +138,7 @@ function ossify() {
   done
 
   # end of playbook
-  echo "--------END---------------"    >> $OSSIFY_OUT_FILE
+  echo "----END-------------------"    >> $OSSIFY_OUT_FILE
 
   if [ $OSSIFY_QUIT_AFTER -eq 1 ]
   then
