@@ -10,13 +10,6 @@ function ossify_theo_sign_off() {
   ossify_theo_said
 }
 
-function ossify_pauses() {
-  for VAR in `seq 1 3`
-  do
-    spotify pause
-  done
-}
-
 function ossify() {
   # args
   OSSIFY_PLAYLIST_NAME=$1
@@ -77,7 +70,6 @@ function ossify() {
   do
 
     # next song
-    ossify_pauses &
     spotify next
     spotify pause
 
@@ -126,11 +118,11 @@ function ossify() {
 
     # song play
     sleep ${OSSIFY_SKIP_TIME_ADJ}s
+    spotify pause
 
     # fyi mode
     if [ $OSSIFY_THEO_MODE -eq 3 ]
     then
-      spotify pause
       OSSIFY_THEO_SAYS="For Your Information... that was ${OSSIFY_THEO_SAYS}"
       ossify_theo_said
     fi
