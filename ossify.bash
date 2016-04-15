@@ -79,9 +79,9 @@ function ossify() {
     fi
 
   done
-  ossify_theo_sign_off
   if [ $QUIT_AFTER -eq 1 ]
   then
+    ossify_theo_sign_off
     spotify quit
   fi
 }

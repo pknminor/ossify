@@ -20,10 +20,10 @@ source ossify.bash
 >      <playlist-name>   = Playlist name
 >      <time-per-song>   = Recommended between 0-45
 >      <number-of-songs> = >0
->      <theo-mode>       = 0, Classic Mode, Theo speaks before the song
->                          1, Armin Mode, Theo speaks at the begining of the song
->                          2, FYI Mode, Theo speaks at the end of the play
->      <quit-afte>       = 0, Keep listening to the music..
->                          1, Quit after the plays
+>      <theo-mode>       = 1, Classic Mode, Theo speaks before the song
+>                          2, Armin Mode, Theo speaks at the begining of the song
+>                          3, FYI Mode, Theo speaks at the end of the play
+>      <quit-after>      = 0, Keep listening to the music..
+>                          1, Quit after <number-of-songs>
 >
 3. Have fun!
