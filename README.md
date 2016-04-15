@@ -32,7 +32,8 @@ Might not be as useful for you depending on your listening style.
 >      ossify <playlist-name> <time-per-song> <number-of-songs> <theo-mode, aka your RJ> <quit-after> "<log-location>"
 >
 >      <playlist-name>   = Playlist name
->      <time-per-song>   = Recommended between 0-45
+>      <time-per-song>   = Recommended between 1-45
+>                          0, entire song
 >      <number-of-songs> = >0
 >      <theo-mode>       = 1, Classic Mode, Theo speaks before the song
 >                          2, Armin Mode, Theo speaks at the begining of the song
