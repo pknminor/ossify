@@ -4,7 +4,7 @@ function ossify_theo_said() {
 }
 
 function ossify_theo_sign_off() {
-  THEO_SAYS="Theo bidding off, Have fun!"
+  THEO_SAYS="Theo bidding off!"
   ossify_theo_said
 }
 

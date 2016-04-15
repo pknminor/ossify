@@ -37,7 +37,7 @@ ossify test 10 1 2 0
 
 Say "Testing Theo mode fyi"
 echo "Testing Theo mode fyi"
-ossify test 10 1 3 0
+ossify test 10 1 3 1
 
 Say "End of all tests"
 echo "End of all tests"
