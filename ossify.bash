@@ -11,6 +11,8 @@ function ossify_theo_sign_off() {
 }
 
 function ossify() {
+
+  # args
   OSSIFY_PLAYLIST_NAME=$1
   OSSIFY_SKIP_TIME=$2
   OSSIFY_NUM_SONGS=$3
@@ -24,20 +26,28 @@ function ossify() {
     OSSIFY_NUM_SONGS=56
     OSSIFY_THEO_MODE=1
     OSSIFY_QUIT_AFTER=0
-    OSSIFY_OUT_LOC="~/ossify_logs"
+    OSSIFY_OUT_LOC="${HOME}/ossify_logs"
   fi
 
-  if [ ! -d "$OSSIFY_OUT_LOC" ]; then
-    echo " Error: Output directory doesn't exist! Exiting.."
-    exit 2
-  fi
-
+  # output logs
   OSSIFY_TIMESTAMP=`date +"%m-%d-%y-%T"`
   OSSIFY_OUT_FILE="${OSSIFY_OUT_LOC}/${OSSIFY_PLAYLIST_NAME}_${OSSIFY_TIMESTAMP}.txt"
+  if [ ! -d $OSSIFY_OUT_LOC ]
+  then
+    echo " Error: Output directory ${OSSIFY_OUT_LOC} doesn't exist! Exiting.."
+    exit 2
+  else
+    touch ${OSSIFY_OUT_FILE}
+    if [ ! -e $OSSIFY_OUT_FILE ]
+    then
+      echo " Error: Unable to create ${OSSIFY_OUT_FILE}! Exiting.."
+    fi
+  fi
   echo "OSSIFY LOGFILE" > ${OSSIFY_OUT_FILE}
 
   # crude way to match gui
-  OSSIFY_SKIP_TIME_ADJ=`expr $OSSIFY_SKIP_TIME - 2`
+  #OSSIFY_SKIP_TIME_ADJ=`expr $OSSIFY_SKIP_TIME - 2`
+  OSSIFY_SKIP_TIME_ADJ=$OSSIFY_SKIP_TIME
 
   for VAR in `seq 1 ${OSSIFY_NUM_SONGS}`
   do
@@ -78,6 +88,7 @@ function ossify() {
     then
       sleep 6s
       ossify_theo_said
+      OSSIFY_SKIP_TIME_ADJ=`expr ${OSSIFY_SKIP_TIME_ADJ} - 6`
     fi
 
     # keep track of what you listened to
@@ -87,7 +98,7 @@ function ossify() {
     echo "----------------"              >> $OSSIFY_OUT_FILE
 
     # song play
-    sleep ${OSSIFY_SKIP_TIME}s
+    sleep ${OSSIFY_SKIP_TIME_ADJ}s
 
     # fyi mode
     if [ $OSSIFY_THEO_MODE -eq 3 ]

@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# export OSSIFY_DEBUG=1
-
 #  Usage:
 #
 #      ossify <playlist-name> <time-per-song> <number-of-songs> <theo-mode, aka your RJ> <quit-after>
@@ -17,34 +15,35 @@
 #      <log-location>    = Logfile path
 #
 #
+# export OSSIFY_DEBUG=1
+
+source ${PWD}/ossify.bash
+
+function sac {
+Say $THEO_SAYS
+echo $THEO_SAYS
+}
 
 # test exit after play
-Say "TEST1"
-echo "TEST1"
-ossify test 10 2 1 1 "~/ossify_logs"
+THEO_SAYS="TEST1: APP EXIT"; sac
+ossify list1 10 2 1 1 "${HOME}/ossify_logs_test"
 
 # check if app exited
-Say "check if Spotify app exited"
-echo "check if Spotify app exited"
-sleep 10s
+THEO_SAYS="Check if Spotify app exited"; sac
+sleep 1s
 
 # test RJ modes
-Say "TEST2"
-echo "TEST2"
+THEO_SAYS="TEST2: Radio Jockey Modes"; sac
 
-Say "Testing Theo mode classic"
-echo "Testing Theo mode classic"
-ossify test 10 1 1 0 "~/ossify_logs"
+THEO_SAYS="Testing Theo mode classic, ten seconds and two songs"; sac
+ossify list2 10 2 1 0 "${HOME}/ossify_logs_test"
 
-Say "Testing Theo mode armin"
-echo "Testing Theo mode armin"
-ossify test 10 1 2 0 "~/ossify_logs"
+THEO_SAYS="Testing Theo mode armin, ten seconds and two songs"; sac
+ossify list3 10 2 2 0 "${HOME}/ossify_logs_test"
 
-Say "Testing Theo mode fyi"
-echo "Testing Theo mode fyi"
-ossify test 10 1 3 1 "~/ossify_logs"
+THEO_SAYS="Testing Theo mode fyi, ten seconds and two songs"; sac
+ossify list4 10 2 3 1 "${HOME}/ossify_logs_test"
 
-Say "End of all tests"
-echo "End of all tests"
+THEO_SAYS="End of all tests"; sac
 
 exit 0

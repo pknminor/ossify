@@ -1,7 +1,7 @@
 # ossify
 
 Ossify, your Spotify listening companion, eases the *tedium* of music discovery and recollection.
-The idea is to automate the RJ experience and keep track of what you had listened to.
+The idea is to automate the RJ(Radio Jockey) experience and keep track of what you had listened to.
 
 Change songs after *X* seconds, get artist and song information via audio.
 
