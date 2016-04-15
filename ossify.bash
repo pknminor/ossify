@@ -11,7 +11,6 @@ function ossify_theo_sign_off() {
 }
 
 function ossify() {
-
   # args
   OSSIFY_PLAYLIST_NAME=$1
   OSSIFY_SKIP_TIME=$2
@@ -28,23 +27,22 @@ function ossify() {
     OSSIFY_QUIT_AFTER=0
     OSSIFY_OUT_LOC="${HOME}/ossify_logs"
   fi
-
   if [ $OSSIFY_DEBUG ]
   then
-    echo "OSSIFY_PLAYLIST_NAME $OSSIFY_PLAYLIST_NAME"
-    echo "OSSIFY_SKIP_TIME $OSSIFY_SKIP_TIME"
-    echo "OSSIFY_NUM_SONGS $OSSIFY_NUM_SONGS"
-    echo "OSSIFY_THEO_MODE $OSSIFY_THEO_MODE"
-    echo "OSSIFY_QUIT_AFTER $OSSIFY_QUIT_AFTER"
-    echo "OSSIFY_OUT_LOC $OSSIFY_OUT_LOC"
+    echo "OSSIFY_PLAYLIST_NAME ${OSSIFY_PLAYLIST_NAME}"
+    echo "OSSIFY_SKIP_TIME ${OSSIFY_SKIP_TIM}E"
+    echo "OSSIFY_NUM_SONGS ${OSSIFY_NUM_SONGS}"
+    echo "OSSIFY_THEO_MODE ${OSSIFY_THEO_MODE}"
+    echo "OSSIFY_QUIT_AFTER ${OSSIFY_QUIT_AFTER}"
+    echo "OSSIFY_OUT_LOC ${OSSIFY_OUT_LOC}"
   fi
 
-  # output logs
+  # output log
   OSSIFY_TIMESTAMP=`date +"%m-%d-%y-%T"`
   OSSIFY_OUT_FILE="${OSSIFY_OUT_LOC}/${OSSIFY_PLAYLIST_NAME}_${OSSIFY_TIMESTAMP}.txt"
   if [ ! -d $OSSIFY_OUT_LOC ]
   then
-    echo " Error: Output directory ${OSSIFY_OUT_LOC} doesn't exist! Exiting.."
+    echo "Error: Output directory ${OSSIFY_OUT_LOC} doesn't exist! Exiting.."
     exit 2
   else
     touch ${OSSIFY_OUT_FILE}
@@ -52,10 +50,18 @@ function ossify() {
 
     if [ ! -e $OSSIFY_OUT_FILE ]
     then
-      echo " Error: Unable to create ${OSSIFY_OUT_FILE}! Exiting.."
+      echo "Error: Unable to create ${OSSIFY_OUT_FILE}! Exiting.."
     fi
   fi
-  echo "OSSIFY LOGFILE" > ${OSSIFY_OUT_FILE}
+  # the playbook begins...
+  echo "---OSSIFY PLAY HISTORY----"                        >> $OSSIFY_OUT_FILE
+  echo "OSSIFY_PLAYLIST_NAME: ${OSSIFY_PLAYLIST_NAME}"     >> $OSSIFY_OUT_FILE
+  echo "OSSIFY_SKIP_TIME:     ${OSSIFY_SKIP_TIME}"         >> $OSSIFY_OUT_FILE
+  echo "OSSIFY_NUM_SONGS:     ${OSSIFY_NUM_SONGS}"         >> $OSSIFY_OUT_FILE
+  echo "OSSIFY_THEO_MODE:     ${OSSIFY_THEO_MODE}"         >> $OSSIFY_OUT_FILE
+  echo "OSSIFY_QUIT_AFTER:    ${OSSIFY_QUIT_AFTER}"        >> $OSSIFY_OUT_FILE
+  echo "OSSIFY_OUT_LOC:       ${OSSIFY_OUT_LOC}"           >> $OSSIFY_OUT_FILE
+  echo "--------------------------"                        >> $OSSIFY_OUT_FILE
 
   # crude way to match gui
   OSSIFY_SKIP_TIME_ADJ=`expr $OSSIFY_SKIP_TIME - 1`
@@ -73,7 +79,6 @@ function ossify() {
     # get info
     OSSIFY_SONGT=`spotify info |  sed -n 's/Track:[[:space:]]*\(.*\)/\1/p'`
     OSSIFY_AARTIST=`spotify info | sed -n 's/Album Artist:[[:space:]]*\(.*\)/\1/p'`
-    OSSIFY_THEO_SAYS="${OSSIFY_SONGT} by ${OSSIFY_AARTIST}"
 
     # dbg print
     if [ $OSSIFY_DEBUG ]
@@ -85,13 +90,16 @@ function ossify() {
       echo "BASH DBG"
     fi
 
+    # standard spiel, more info?
+    OSSIFY_THEO_SAYS="${OSSIFY_SONGT} by ${OSSIFY_AARTIST}"
+
     # classic mode, before play
     if [ $OSSIFY_THEO_MODE -eq 1 ]
     then
       ossify_theo_said
     fi
 
-    # START
+    # start
     spotify play
 
     # armin mode, overlapped beginning
@@ -103,10 +111,10 @@ function ossify() {
     fi
 
     # keep track of what you listened to
-    echo "SONG #${VAR}"                  >> $OSSIFY_OUT_FILE
+    echo "PLAY #${VAR}"                  >> $OSSIFY_OUT_FILE
     spotify share                        >> $OSSIFY_OUT_FILE
     spotify info                         >> $OSSIFY_OUT_FILE
-    echo "----------------"              >> $OSSIFY_OUT_FILE
+    echo "--------------------------"    >> $OSSIFY_OUT_FILE
 
     # song play
     sleep ${OSSIFY_SKIP_TIME_ADJ}s
@@ -120,6 +128,10 @@ function ossify() {
     fi
 
   done
+
+  # end of playbook
+  echo "--------END---------------"    >> $OSSIFY_OUT_FILE
+
   if [ $OSSIFY_QUIT_AFTER -eq 1 ]
   then
     ossify_theo_sign_off
