@@ -1,15 +1,14 @@
 # ossify
 
 # Prerequisites
-https://github.com/dronir/SpotifyControl/blob/master/SpotifyControl
+https://github.com/hnarayanan/shpotify
 
 # Setup instructions
 
 1. Add this to your aliases, bashrc:
-alias spotify="SpotifyControl"
 source ossify.bash
 
-2. Use the bash function ossify
+2. Use the bash function "ossify"
 >
 >  Usage:
 >
