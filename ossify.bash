@@ -69,9 +69,6 @@ function ossify() {
   for VAR in `seq 1 ${OSSIFY_NUM_SONGS}`
   do
 
-    # pause current play at start
-    spotify pause
-
     # next song
     spotify next
     spotify pause

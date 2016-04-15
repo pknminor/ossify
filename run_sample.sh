@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Run this script from ossify/
+
 #  Usage:
 #
 #      ossify <playlist-name> <time-per-song> <number-of-songs> <theo-mode, aka your RJ> <quit-after>
@@ -17,7 +19,7 @@
 #
 # export OSSIFY_DEBUG=1
 
-source ${PWD}/ossify.bash
+source ossify.bash
 
 function sac {
 Say $THEO_SAYS
@@ -30,19 +32,22 @@ ossify list1 10 1 1 1 "${HOME}/ossify_logs_test"
 
 # check if app exited
 THEO_SAYS="Check if Spotify app exited"; sac
-sleep 1s
+sleep 2s
 
 # test RJ modes
 THEO_SAYS="TEST2: Radio Jockey Modes"; sac
 
 THEO_SAYS="Testing Theo mode classic, ten seconds and two songs"; sac
 ossify list2 10 2 1 0 "${HOME}/ossify_logs_test"
+spotify pause
 
 THEO_SAYS="Testing Theo mode armin, ten seconds and two songs"; sac
 ossify list3 10 2 2 0 "${HOME}/ossify_logs_test"
+spotify pause
 
 THEO_SAYS="Testing Theo mode fyi, ten seconds and two songs"; sac
 ossify list4 10 2 3 0 "${HOME}/ossify_logs_test"
+spotify pause
 
 THEO_SAYS="End of all tests"; sac
 
