@@ -109,7 +109,9 @@ function ossify() {
 
     # keep track of what you listened to
     echo "PLAY #${VAR}"                  >> $OSSIFY_OUT_FILE
+    echo "--------------------------"    >> $OSSIFY_OUT_FILE
     spotify share                        >> $OSSIFY_OUT_FILE
+    echo "--------------------------"    >> $OSSIFY_OUT_FILE
     spotify info                         >> $OSSIFY_OUT_FILE
     echo "--------------------------"    >> $OSSIFY_OUT_FILE
 
