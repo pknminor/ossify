@@ -5,9 +5,6 @@ The idea is to automate the RJ(Radio Jockey) experience and keep track of what y
 
 Change songs after a certain amount of time, get artist and song information via audio feedback during song play.
 
-PS: I rarely listen to an entire song when discovering new music.
-Might not be as useful for you depending on your listening style.
-
 # Prerequisites
 - https://github.com/hnarayanan/shpotify
 - OSX El Capitan(10.11.2)
