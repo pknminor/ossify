@@ -20,9 +20,9 @@ Might not be as useful for you depending on your listening style.
 
 2. run ossify
 
-- Start a playlist or an artist page on the Spotify GUI, with or without shuffle.
+2.1  Start a playlist or an artist page on the Spotify GUI, with or without shuffle.
 
-- Launch ossify from the terminal.
+2.2  Launch ossify from the terminal.
 
 >  For example,
 >  ossify ramones 45 30 3 0 ~/ossify_logs
