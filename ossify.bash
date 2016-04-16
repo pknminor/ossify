@@ -116,11 +116,12 @@ function ossify() {
     echo "--------------------------"    >> ${OSSIFY_OUT_FILE}
     echo "----END-OF-TRACK----------"    >> ${OSSIFY_OUT_FILE}
 
+    OSSIFY_SONG_SECS_ADJ=`bc <<< "scale=2; $OSSIFY_SONG_SECS - 3"`
+
     # song play
     if [ $OSSIFY_SKIP_TIME == "f" ]
     then
 
-      OSSIFY_SONG_SECS_ADJ=`bc <<< "scale=2; $OSSIFY_SONG_SECS - 3"`
       SLEEP_TIME=${OSSIFY_SONG_SECS}
       echo "sleeping for ${SLEEP_TIME} seconds"
       sleep ${SLEEP_TIME}s
@@ -129,16 +130,15 @@ function ossify() {
     elif [ $OSSIFY_SKIP_TIME == "r" ]
     then
 
-      OSSIFY_SONG_SECS_ADJ=`bc <<< "scale=2; $OSSIFY_SONG_SECS - 1"`
-
       ossify_rand_min=30
       ossify_rand_max=${OSSIFY_SONG_SECS_ADJ}
-      ossify_rand_diff=$((${ossify_rand_max}-${ossify_rand_min}+1))
+      ossify_rand_diff=`bc <<< "scale=2; ${ossify_rand_max}-${ossify_rand_min}+1"`
 
-      OSSIFY_RAND_SKIP_TIME=$(( ossify_rand_min + RANDOM%${ossify_rand_diff} ))
+      RANDOM_DIFF=$RANDOM%${ossify_rand_diff}
+      OSSIFY_RAND_SKIP_TIME=`bc <<< "scale=2; ${ossify_rand_min}+$RANDOM_DIFF"`
 
       SLEEP_TIME=$OSSIFY_RAND_SKIP_TIME
-      echo "sleeping for ${SLEEP_TIME} seconds"
+      echo "sleeping for RANDOM ${SLEEP_TIME} seconds"
       sleep ${SLEEP_TIME}s
       spotify pause
 
