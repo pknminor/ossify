@@ -148,7 +148,6 @@ function ossify() {
         else
             OSSIFY_SONG_SECS_ADJ=`bc <<< "scale=2; $OSSIFY_SONG_SECS - 3"`
         fi
-        echo "PY3"
 
         # song play
         if [ $OSSIFY_SKIP_TIME == "f" ]
