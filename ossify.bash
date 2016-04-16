@@ -12,8 +12,8 @@ function ossify_theo_sign_off() {
 
 function ossify() {
   # args
-  OSSIFY_PLAYLIST_NAME=$1
-  OSSIFY_SKIP_TIME=$2
+  OSSIFY_PLAYLIST_NAME="$1"
+  OSSIFY_SKIP_TIME="$2"
   OSSIFY_NUM_SONGS=$3
   OSSIFY_THEO_MODE=$4
   OSSIFY_QUIT_AFTER=$5
@@ -76,14 +76,17 @@ function ossify() {
     # get info
     OSSIFY_SONGT=`spotify info |  sed -n 's/Track:[[:space:]]*\(.*\)/\1/p'`
     OSSIFY_AARTIST=`spotify info | sed -n 's/Album Artist:[[:space:]]*\(.*\)/\1/p'`
+    OSSIFY_SONG_INFO_SECS=`spotify info | sed -n 's/Seconds:[[:space:]]*\(.*\)/\1/p'`
+    OSSIFY_SONG_SECS=$(($OSSIFY_SONG_INFO_SECS/1000))
 
     # dbg print
     if [ $OSSIFY_DEBUG ]
     then
       echo "BASH DBG"
-      echo "SKIP_TIME = $OSSIFY_SKIP_TIME"
-      echo "AARTIST   = $OSSIFY_AARTIST"
-      echo "THEO_MODE = $OSSIFY_THEO_MODE"
+      echo "OSSIFY_SKIP_TIME = $OSSIFY_SKIP_TIME"
+      echo "OSSIFY_AARTIST   = $OSSIFY_AARTIST"
+      echo "OSSIFY_THEO_MODE = $OSSIFY_THEO_MODE"
+      echo "OSSIFY_SONG_SECS = $OSSIFY_SONG_SECS"
       echo "BASH DBG"
     fi
 
@@ -117,8 +120,24 @@ function ossify() {
     echo "----END-OF-TRACK----------"    >> $OSSIFY_OUT_FILE
 
     # song play
-    sleep ${OSSIFY_SKIP_TIME_ADJ}s
-    spotify pause
+    if [ $OSSIFY_SKIP_TIME -eq "f" ]
+    then
+      sleep ${OSSIFY_SONG_SECS}s
+      spotify pause
+    elif [ $OSSIFY_SKIP_TIME -eq "r" ]
+    then
+      OSSIFY_RAND_SKIP_TIME=`shuf -i 0-${OSSIFY_SONG_SECS} -n 1`
+      if [ $OSSIFY_DEBUG ]
+      then
+        echo "$OSSIFY_RAND_SKIP_TIME"
+      fi
+
+      sleep ${OSSIFY_RAND_SKIP_TIME}s
+      spotify pause
+    else
+      sleep ${OSSIFY_SKIP_TIME_ADJ}s
+      spotify pause
+    fi
 
     # fyi mode
     if [ $OSSIFY_THEO_MODE -eq 3 ]
