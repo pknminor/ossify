@@ -104,6 +104,7 @@ function ossify() {
       echo "sleeping for ${SLEEP_TIME} seconds"
       sleep ${SLEEP_TIME}s
       ossify_theo_said
+      $OSSIFY_SONG_SECS=`bc <<< "scale=2; $OSSIFY_SONG_SECS - $SLEEP_TIME"`
     fi
 
     # keep track of what you listened to
@@ -119,11 +120,11 @@ function ossify() {
     if [ $OSSIFY_SKIP_TIME == "f" ]
     then
 
-     OSSIFY_SONG_SECS_ADJ=`bc <<< "scale=2; $OSSIFY_SONG_SECS - 1"`
-     SLEEP_TIME=${OSSIFY_SONG_SECS}
-     echo "sleeping for ${SLEEP_TIME} seconds"
-     sleep ${SLEEP_TIME}s
-     spotify pause
+      OSSIFY_SONG_SECS_ADJ=`bc <<< "scale=2; $OSSIFY_SONG_SECS - 3"`
+      SLEEP_TIME=${OSSIFY_SONG_SECS}
+      echo "sleeping for ${SLEEP_TIME} seconds"
+      sleep ${SLEEP_TIME}s
+      spotify pause
 
     elif [ $OSSIFY_SKIP_TIME == "r" ]
     then
