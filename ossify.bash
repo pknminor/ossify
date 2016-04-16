@@ -26,7 +26,7 @@ function ossify() {
     OSSIFY_QUIT_AFTER=${5}
     OSSIFY_OUT_LOC=${6}
     OSSIFY_ARMIN_DELAY=6
-    OSSIFY_SKIP_COMP=3
+    OSSIFY_SKIP_COMP=1
     OSSIFY_SONG_COMP=3
 
     if [ -z $OSSIFY_SKIP_TIME ] || [ -z $OSSIFY_PLAYLIST_NAME ] || [ -z $OSSIFY_NUM_SONGS ] || [ -z $OSSIFY_THEO_MODE ] || [ -z $OSSIFY_QUIT_AFTER ] || [ -z $OSSIFY_OUT_LOC ]
@@ -138,9 +138,9 @@ function ossify() {
             # adjust skip time
             if [ $OSSIFY_PY_MATH ]
             then
-                OSSIFY_SKIP_TIME_ADJ=`python -c "print $OSSIFY_SKIP_TIME - $OSSIFY_ARMIN_DELAY"`
+                OSSIFY_SKIP_TIME=`python -c "print $OSSIFY_SKIP_TIME - $OSSIFY_ARMIN_DELAY"`
             else
-                OSSIFY_SKIP_TIME_ADJ=`bc <<< "scale=2; $OSSIFY_SKIP_TIME - $OSSIFY_ARMIN_DELAY"`
+                OSSIFY_SKIP_TIME=`bc <<< "scale=2; $OSSIFY_SKIP_TIME - $OSSIFY_ARMIN_DELAY"`
             fi
         fi
 
@@ -160,7 +160,7 @@ function ossify() {
             OSSIFY_SONG_SECS_ADJ=`bc <<< "scale=2; $OSSIFY_SONG_SECS - $OSSIFY_SONG_COMP"`
         fi
 
-        # song play
+        # CHECKME
         if [ $OSSIFY_SKIP_TIME == "f" ]
         then
             if [ $OSSIFY_DEBUG ]
@@ -170,6 +170,7 @@ function ossify() {
             ossify_sleep $OSSIFY_SONG_SECS_ADJ
             spotify pause
 
+        # CHECKME
         elif [ $OSSIFY_SKIP_TIME == "r" ]
         then
             if [ $OSSIFY_DEBUG ]
