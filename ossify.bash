@@ -104,9 +104,6 @@ function ossify() {
       echo "sleeping for ${SLEEP_TIME} seconds"
       sleep ${SLEEP_TIME}s
       ossify_theo_said
-      OSSIFY_SONG_SECS_ADJ=`bc <<< "scale=2; $OSSIFY_SONG_SECS - 1"`
-      sleep ${OSSIFY_SONG_SECS}s
-      spotify pause
     fi
 
     # keep track of what you listened to
