@@ -16,9 +16,9 @@ Might not be as useful for you depending on your listening style.
 - Optional: NoSleep(http://www.macupdate.com/app/mac/37991/nosleep)
 
 # Instructions
-### source ossify.bash from your ${HOME}/.bashrc
+1. source ossify.bash from your ${HOME}/.bashrc
 
-### run ossify
+2. run ossify
 
 >  1. Start a playlist or an artist page on the Spotify GUI, with or without shuffle.
 >
