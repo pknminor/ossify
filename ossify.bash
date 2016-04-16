@@ -120,7 +120,9 @@ function ossify() {
     then
 
      OSSIFY_SONG_SECS_ADJ=`bc <<< "scale=2; $OSSIFY_SONG_SECS - 1"`
-     sleep ${OSSIFY_SONG_SECS}s
+     SLEEP_TIME=${OSSIFY_SONG_SECS}
+     echo "sleeping for ${SLEEP_TIME} seconds"
+     sleep ${SLEEP_TIME}s
      spotify pause
 
     elif [ $OSSIFY_SKIP_TIME == "r" ]
