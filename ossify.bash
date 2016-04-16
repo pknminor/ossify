@@ -72,8 +72,8 @@ function ossify() {
     OSSIFY_SONGT=`spotify info |  sed -n 's/Track:[[:space:]]*\(.*\)/\1/p'`
     OSSIFY_AARTIST=`spotify info | sed -n 's/Album Artist:[[:space:]]*\(.*\)/\1/p'`
     OSSIFY_SONG_INFO_SECS=`spotify info | sed -n 's/Seconds:[[:space:]]*\(.*\)/\1/p'`
-    OSSIFY_SONG_SECS=$((${OSSIFY_SONG_INFO_SECS}/1000))
-
+    #OSSIFY_SONG_SECS=$((${OSSIFY_SONG_INFO_SECS}/1000))
+    OSSIFY_SONG_SECS=`bc <<< "scale=2; ${OSSIFY_SONG_INFO_SECS}/1000"`
     # dbg print
     if [ $OSSIFY_DEBUG ]
     then
@@ -100,9 +100,13 @@ function ossify() {
     # armin mode, overlapped beginning
     if [ $OSSIFY_THEO_MODE -eq 2 ]
     then
-      sleep 6s
+      SLEEP_TIME=6
+      echo "sleeping for ${SLEEP_TIME} seconds"
+      sleep ${SLEEP_TIME}s
       ossify_theo_said
-      OSSIFY_SKIP_TIME_ADJ=`expr ${OSSIFY_SKIP_TIME_ADJ} - 6`
+      OSSIFY_SONG_SECS_ADJ=`bc <<< "scale=2; $OSSIFY_SONG_SECS - 1"`
+      sleep ${OSSIFY_SONG_SECS}s
+      spotify pause
     fi
 
     # keep track of what you listened to
@@ -117,12 +121,15 @@ function ossify() {
     # song play
     if [ $OSSIFY_SKIP_TIME == "f" ]
     then
-      OSSIFY_SONG_SECS_ADJ=`expr ${OSSIFY_SONG_SECS} - 1`
-      sleep ${OSSIFY_SONG_SECS}s
-      spotify pause
+
+     OSSIFY_SONG_SECS_ADJ=`bc <<< "scale=2; $OSSIFY_SONG_SECS - 1"`
+     sleep ${OSSIFY_SONG_SECS}s
+     spotify pause
+
     elif [ $OSSIFY_SKIP_TIME == "r" ]
     then
-      OSSIFY_SONG_SECS_ADJ=`expr ${OSSIFY_SONG_SECS} - 1`
+
+      OSSIFY_SONG_SECS_ADJ=`bc <<< "scale=2; $OSSIFY_SONG_SECS - 1"`
 
       ossify_rand_min=30
       ossify_rand_max=${OSSIFY_SONG_SECS_ADJ}
@@ -130,17 +137,20 @@ function ossify() {
 
       OSSIFY_RAND_SKIP_TIME=$(( ossify_rand_min + RANDOM%${ossify_rand_diff} ))
 
-      if [ $OSSIFY_DEBUG ]
-      then
-        echo "${OSSIFY_RAND_SKIP_TIME}"
-      fi
-      sleep ${OSSIFY_RAND_SKIP_TIME}s
+      SLEEP_TIME=$OSSIFY_RAND_SKIP_TIME
+      echo "sleeping for ${SLEEP_TIME} seconds"
+      sleep ${SLEEP_TIME}s
       spotify pause
+
     else
+
       # adjust
-      OSSIFY_SKIP_TIME_ADJ=`expr ${OSSIFY_SKIP_TIME} - 1`
-      sleep ${OSSIFY_SKIP_TIME_ADJ}s
+      OSSIFY_SKIP_TIME_ADJ=$`bc <<< "scale=2; $OSSIFY_SKIP_TIME - 1"`
+      SLEEP_TIME=$OSSIFY_SKIP_TIME_ADJ
+      echo "sleeping for ${SLEEP_TIME} seconds"
+      sleep ${SLEEP_TIME}s
       spotify pause
+
     fi
 
     # fyi mode
