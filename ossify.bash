@@ -10,6 +10,15 @@ function ossify_theo_sign_off() {
   ossify_theo_said
 }
 
+function ossify_sleep() {
+  if [ $OSSIFY_DEBUG ]
+  then
+    echo "sleeping for ${SLEEP_TIME} seconds"
+    sleep ${SLEEP_TIME}s
+  fi
+}
+
+
 function ossify() {
   # args
   OSSIFY_PLAYLIST_NAME="${1}"
@@ -101,8 +110,7 @@ function ossify() {
     if [ $OSSIFY_THEO_MODE -eq 2 ]
     then
       SLEEP_TIME=6
-      echo "sleeping for ${SLEEP_TIME} seconds"
-      sleep ${SLEEP_TIME}s
+      ossify_sleep
       ossify_theo_said
       $OSSIFY_SONG_SECS=`bc <<< "scale=2; $OSSIFY_SONG_SECS - $SLEEP_TIME"`
     fi
@@ -123,8 +131,7 @@ function ossify() {
     then
 
       SLEEP_TIME=${OSSIFY_SONG_SECS}
-      echo "sleeping for ${SLEEP_TIME} seconds"
-      sleep ${SLEEP_TIME}s
+      ossify_sleep
       spotify pause
 
     elif [ $OSSIFY_SKIP_TIME == "r" ]
@@ -138,8 +145,7 @@ function ossify() {
       OSSIFY_RAND_SKIP_TIME=`bc <<< "scale=2; ${ossify_rand_min}+$RANDOM_DIFF"`
 
       SLEEP_TIME=$OSSIFY_RAND_SKIP_TIME
-      echo "sleeping for RANDOM ${SLEEP_TIME} seconds"
-      sleep ${SLEEP_TIME}s
+      ossify_sleep
       spotify pause
 
     else
@@ -147,8 +153,7 @@ function ossify() {
       # adjust
       OSSIFY_SKIP_TIME_ADJ=$`bc <<< "scale=2; $OSSIFY_SKIP_TIME - 1"`
       SLEEP_TIME=$OSSIFY_SKIP_TIME_ADJ
-      echo "sleeping for ${SLEEP_TIME} seconds"
-      sleep ${SLEEP_TIME}s
+      ossify_sleep
       spotify pause
 
     fi
