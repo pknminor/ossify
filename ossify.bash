@@ -124,7 +124,7 @@ function ossify() {
     then
       OSSIFY_SONG_SECS_ADJ=`expr ${OSSIFY_SONG_SECS} - 1`
 
-      ossify_rand_min=0
+      ossify_rand_min=30
       ossify_rand_max=${OSSIFY_SONG_SECS_ADJ}
       ossify_rand_diff=$((${ossify_rand_max}-${ossify_rand_min}+1))
 
