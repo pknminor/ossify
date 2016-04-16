@@ -137,7 +137,7 @@ function ossify() {
       sleep ${OSSIFY_RAND_SKIP_TIME}s
       spotify pause
     else
-      # crude way to match gui
+      # adjust
       OSSIFY_SKIP_TIME_ADJ=`expr ${OSSIFY_SKIP_TIME} - 1`
       sleep ${OSSIFY_SKIP_TIME_ADJ}s
       spotify pause
@@ -152,8 +152,7 @@ function ossify() {
 
   done
 
-  # end of playbook
-  echo "----END-------------------"    >> ${OSSIFY_OUT_FILE}
+  echo "----END-------------------"    >> ${OSSIFY_OUT_FILE} # end of playbook
 
   if [ $OSSIFY_QUIT_AFTER -eq 1 ]
   then
