@@ -43,7 +43,7 @@ Might not be as useful for you depending on your listening style.
 >                          1, Quit after <number-of-songs>, Theo speaks at the end of all play(s)
 >      <log-location>    = Logfile path, default is HOME/ossify_logs
 >
-
-3. ossify will write out a file with your listening history. eg. ramones_04-15-16-17:54:10.txt for your future reference.
+>
+>  3. ossify will write out a file with your listening history. eg. ramones_04-15-16-17:54:10.txt for your future reference.
 
 ## Have fun!
