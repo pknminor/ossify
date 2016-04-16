@@ -20,10 +20,10 @@ Might not be as useful for you depending on your listening style.
 
 ### run ossify
 
-#### Start a playlist or an artist page on the Spotify GUI, with or without shuffle.
-
-####  Launch ossify from the terminal.
-
+>  1. Start a playlist or an artist page on the Spotify GUI, with or without shuffle.
+>
+>  2. Launch ossify from the terminal.
+>
 >  For example,
 >  ossify ramones 45 30 3 0 ~/ossify_logs
 >
@@ -44,6 +44,6 @@ Might not be as useful for you depending on your listening style.
 >      <log-location>    = Logfile path, default is HOME/ossify_logs
 >
 
-### ossify will write out a file with your listening history. eg. ramones_04-15-16-17:54:10.txt for your future reference.
+3. ossify will write out a file with your listening history. eg. ramones_04-15-16-17:54:10.txt for your future reference.
 
 ## Have fun!
