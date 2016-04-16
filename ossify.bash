@@ -12,12 +12,12 @@ function ossify_theo_sign_off() {
 
 function ossify() {
   # args
-  OSSIFY_PLAYLIST_NAME="$1"
-  OSSIFY_SKIP_TIME="$2"
-  OSSIFY_NUM_SONGS=$3
-  OSSIFY_THEO_MODE=$4
-  OSSIFY_QUIT_AFTER=$5
-  OSSIFY_OUT_LOC=$6
+  OSSIFY_PLAYLIST_NAME="${1}"
+  OSSIFY_SKIP_TIME="${2}"
+  OSSIFY_NUM_SONGS=${3}
+  OSSIFY_THEO_MODE=${4}
+  OSSIFY_QUIT_AFTER=${5}
+  OSSIFY_OUT_LOC=${6}
   if [ -z $OSSIFY_SKIP_TIME ] || [ -z $OSSIFY_PLAYLIST_NAME ] || [ -z $OSSIFY_NUM_SONGS ] || [ -z $OSSIFY_THEO_MODE ] || [ -z $OSSIFY_QUIT_AFTER ] || [ -z $OSSIFY_OUT_LOC ]
   then
     OSSIFY_PLAYLIST_NAME="UNKNOWN_ARTIST"
@@ -74,16 +74,16 @@ function ossify() {
     OSSIFY_SONGT=`spotify info |  sed -n 's/Track:[[:space:]]*\(.*\)/\1/p'`
     OSSIFY_AARTIST=`spotify info | sed -n 's/Album Artist:[[:space:]]*\(.*\)/\1/p'`
     OSSIFY_SONG_INFO_SECS=`spotify info | sed -n 's/Seconds:[[:space:]]*\(.*\)/\1/p'`
-    OSSIFY_SONG_SECS=$(($OSSIFY_SONG_INFO_SECS/1000))
+    OSSIFY_SONG_SECS=$((${OSSIFY_SONG_INFO_SECS}/1000))
 
     # dbg print
     if [ $OSSIFY_DEBUG ]
     then
       echo "BASH DBG"
-      echo "OSSIFY_SKIP_TIME = $OSSIFY_SKIP_TIME"
-      echo "OSSIFY_AARTIST   = $OSSIFY_AARTIST"
-      echo "OSSIFY_THEO_MODE = $OSSIFY_THEO_MODE"
-      echo "OSSIFY_SONG_SECS = $OSSIFY_SONG_SECS"
+      echo "OSSIFY_SKIP_TIME = ${OSSIFY_SKIP_TIME}"
+      echo "OSSIFY_AARTIST   = ${OSSIFY_AARTIST}"
+      echo "OSSIFY_THEO_MODE = ${OSSIFY_THEO_MODE}"
+      echo "OSSIFY_SONG_SECS = ${OSSIFY_SONG_SECS}"
       echo "BASH DBG"
     fi
 
@@ -117,24 +117,30 @@ function ossify() {
     echo "----END-OF-TRACK----------"    >> $OSSIFY_OUT_FILE
 
     # song play
-    if [ $OSSIFY_SKIP_TIME = "f" ]
+    if [ $OSSIFY_SKIP_TIME == "f" ]
     then
+      OSSIFY_SONG_SECS_ADJ=`expr ${OSSIFY_SONG_SECS} - 1`
       sleep ${OSSIFY_SONG_SECS}s
       spotify pause
-    elif [ $OSSIFY_SKIP_TIME = "r" ]
+    elif [ $OSSIFY_SKIP_TIME == "r" ]
     then
-      OSSIFY_RAND_SKIP_TIME=`shuf -i 0-${OSSIFY_SONG_SECS} -n 1`
+      OSSIFY_SONG_SECS_ADJ=`expr ${OSSIFY_SONG_SECS} - 1`
+
+      ossify_rand_min=0
+      ossify_rand_max=${OSSIFY_SONG_SECS_ADJ}
+      ossify_rand_diff=$((${ossify_rand_max}-${ossify_rand_min}+1))
+
+      OSSIFY_RAND_SKIP_TIME=$(( min + RANDOM%${ossify_rand_diff} ))
+
       if [ $OSSIFY_DEBUG ]
       then
-        echo "$OSSIFY_RAND_SKIP_TIME"
+        echo "${OSSIFY_RAND_SKIP_TIME}"
       fi
-
       sleep ${OSSIFY_RAND_SKIP_TIME}s
       spotify pause
     else
       # crude way to match gui
-      OSSIFY_SKIP_TIME_ADJ=`expr $OSSIFY_SKIP_TIME - 1`
-
+      OSSIFY_SKIP_TIME_ADJ=`expr ${OSSIFY_SKIP_TIME} - 1`
       sleep ${OSSIFY_SKIP_TIME_ADJ}s
       spotify pause
     fi
