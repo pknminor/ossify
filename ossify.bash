@@ -78,7 +78,6 @@ function ossify() {
         OSSIFY_SONG_NAME=`spotify info |  sed -n 's/Track:[[:space:]]*\(.*\)/\1/p'`
         OSSIFY_AARTIST=`spotify info | sed -n 's/Album Artist:[[:space:]]*\(.*\)/\1/p'`
         OSSIFY_SONG_INFO_SECS=`spotify info | sed -n 's/Seconds:[[:space:]]*\(.*\)/\1/p'`
-        #OSSIFY_SONG_SECS=$((${OSSIFY_SONG_INFO_SECS}/1000))
 
         if [ $OSSIFY_PY_MATH ]
         then
