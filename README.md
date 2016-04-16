@@ -24,26 +24,26 @@ Might not be as useful for you depending on your listening style.
 >
 >  2. Launch ossify from the terminal.
 >
->  For example,
->  ossify ramones 45 30 3 0 ~/ossify_logs
+> >  For example,
+> >  ossify ramones 45 30 3 0 ~/ossify_logs
 >
->  Usage:
+> >  Usage:
 >
->      ossify <playlist-name> <time-per-song> <number-of-songs> <theo-mode, aka your RJ> <quit-after> <log-location>
+> >      ossify <playlist-name> <time-per-song> <number-of-songs> <theo-mode, aka your RJ> <quit-after> <log-location>
 >
->      <playlist-name>   = Playlist name
->      <time-per-song>   = (0-180), switch time in seconds
->                          f, full song*
->                          r, random switch*
->      <number-of-songs> = >0
->      <theo-mode>       = 1, Classic Mode, Theo speaks before the song
->                          2, Armin Mode, Theo speaks at the begining of the song
->                          3, FYI Mode, Theo speaks at the end of play(s)
->      <quit-after>      = 0, Keep listening to the music..
->                          1, Quit after <number-of-songs>, Theo speaks at the end of all play(s)
->      <log-location>    = Logfile path, default is HOME/ossify_logs
+> >      <playlist-name>   = Playlist name
+> >      <time-per-song>   = (0-180), switch time in seconds
+> >                          f, full song*
+> >                          r, random switch*
+> >      <number-of-songs> = >0
+> >      <theo-mode>       = 1, Classic Mode, Theo speaks before the song
+> >                          2, Armin Mode, Theo speaks at the begining of the song
+> >                          3, FYI Mode, Theo speaks at the end of play(s)
+> >      <quit-after>      = 0, Keep listening to the music..
+> >                          1, Quit after <number-of-songs>, Theo speaks at the end of all play(s)
+> >      <log-location>    = Logfile path, default is HOME/ossify_logs
 >
 >
->  3. ossify will write out a file with your listening history. eg. ramones_04-15-16-17:54:10.txt for your future reference.
+> >  3. ossify will write out a file with your listening history. eg. ramones_04-15-16-17:54:10.txt for your future reference.
 
 ## Have fun!
