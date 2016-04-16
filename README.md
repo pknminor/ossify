@@ -3,7 +3,7 @@
 Ossify, your Spotify listening companion, eases the *tedium* of music discovery and recollection.
 The idea is to automate the RJ(Radio Jockey) experience and keep track of what you had listened to.
 
-Change songs after *X* seconds, get artist and song information via audio.
+Change songs after a certain amount of time, get artist and song information via audio feedback during song play.
 
 PS: I rarely listen to an entire song when discovering new music.
 Might not be as useful for you depending on your listening style.
@@ -16,9 +16,9 @@ Might not be as useful for you depending on your listening style.
 - Optional: NoSleep(http://www.macupdate.com/app/mac/37991/nosleep)
 
 # Instructions
-## Source the bash script "ossify.bash"
+1. Source the bash script "ossify.bash" from your ${HOME}/.bashrc
 
-## Usage
+2. Run ossify
 
 - Start a playlist or an artist page on the Spotify GUI, with or without shuffle.
 
@@ -40,7 +40,7 @@ Might not be as useful for you depending on your listening style.
 >                          2, Armin Mode, Theo speaks at the begining of the song
 >                          3, FYI Mode, Theo speaks at the end of play(s)
 >      <quit-after>      = 0, Keep listening to the music..
->                          1, Quit after <number-of-songs>
+>                          1, Quit after <number-of-songs>, Theo speaks at the end of all play(s)
 >      <log-location>    = Logfile path, default is HOME/ossify_logs
 >
 
