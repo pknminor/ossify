@@ -63,9 +63,6 @@ function ossify() {
   echo "OSSIFY_OUT_LOC:       ${OSSIFY_OUT_LOC}"           >> $OSSIFY_OUT_FILE
   echo "--------------------------"                        >> $OSSIFY_OUT_FILE
 
-  # crude way to match gui
-  OSSIFY_SKIP_TIME_ADJ=`expr $OSSIFY_SKIP_TIME - 1`
-
   for VAR in `seq 1 ${OSSIFY_NUM_SONGS}`
   do
 
@@ -120,11 +117,11 @@ function ossify() {
     echo "----END-OF-TRACK----------"    >> $OSSIFY_OUT_FILE
 
     # song play
-    if [ $OSSIFY_SKIP_TIME -eq "f" ]
+    if [ $OSSIFY_SKIP_TIME = "f" ]
     then
       sleep ${OSSIFY_SONG_SECS}s
       spotify pause
-    elif [ $OSSIFY_SKIP_TIME -eq "r" ]
+    elif [ $OSSIFY_SKIP_TIME = "r" ]
     then
       OSSIFY_RAND_SKIP_TIME=`shuf -i 0-${OSSIFY_SONG_SECS} -n 1`
       if [ $OSSIFY_DEBUG ]
@@ -135,6 +132,9 @@ function ossify() {
       sleep ${OSSIFY_RAND_SKIP_TIME}s
       spotify pause
     else
+      # crude way to match gui
+      OSSIFY_SKIP_TIME_ADJ=`expr $OSSIFY_SKIP_TIME - 1`
+
       sleep ${OSSIFY_SKIP_TIME_ADJ}s
       spotify pause
     fi
