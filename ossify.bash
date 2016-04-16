@@ -25,6 +25,10 @@ function ossify() {
     OSSIFY_THEO_MODE=${4}
     OSSIFY_QUIT_AFTER=${5}
     OSSIFY_OUT_LOC=${6}
+    OSSIFY_ARMIN_DELAY=6
+    OSSIFY_SKIP_COMP=3
+    OSSIFY_SONG_COMP=3
+
     if [ -z $OSSIFY_SKIP_TIME ] || [ -z $OSSIFY_PLAYLIST_NAME ] || [ -z $OSSIFY_NUM_SONGS ] || [ -z $OSSIFY_THEO_MODE ] || [ -z $OSSIFY_QUIT_AFTER ] || [ -z $OSSIFY_OUT_LOC ]
     then
         OSSIFY_PLAYLIST_NAME="UNKNOWN_ARTIST"
@@ -122,14 +126,21 @@ function ossify() {
             then
                 echo "OSSIFY: ARMIN MODE"
             fi
-            SLEEP_TIME=6
-            ossify_sleep "$SLEEP_TIME"
+
+            ossify_sleep "$OSSIFY_ARMIN_DELAY"
             ossify_theo_said "$OSSIFY_THEO_SAYS"
             if [ $OSSIFY_PY_MATH ]
             then
-                OSSIFY_SONG_SECS=`python -c "print $OSSIFY_SONG_SECS - $SLEEP_TIME"`
+                OSSIFY_SONG_SECS=`python -c "print $OSSIFY_SONG_SECS - $OSSIFY_ARMIN_DELAY"`
             else
-                OSSIFY_SONG_SECS=`bc <<< "scale=2; $OSSIFY_SONG_SECS - $SLEEP_TIME"`
+                OSSIFY_SONG_SECS=`bc <<< "scale=2; $OSSIFY_SONG_SECS - $OSSIFY_ARMIN_DELAY"`
+            fi
+            # adjust skip time
+            if [ $OSSIFY_PY_MATH ]
+            then
+                OSSIFY_SKIP_TIME_ADJ=`python -c "print $OSSIFY_SKIP_TIME - $OSSIFY_ARMIN_DELAY"`
+            else
+                OSSIFY_SKIP_TIME_ADJ=`bc <<< "scale=2; $OSSIFY_SKIP_TIME - $OSSIFY_ARMIN_DELAY"`
             fi
         fi
 
@@ -144,9 +155,9 @@ function ossify() {
 
         if [ $OSSIFY_PY_MATH ]
         then
-            OSSIFY_SONG_SECS_ADJ=`python -c "print $OSSIFY_SONG_SECS - 3"`
+            OSSIFY_SONG_SECS_ADJ=`python -c "print $OSSIFY_SONG_SECS - $OSSIFY_SONG_COMP"`
         else
-            OSSIFY_SONG_SECS_ADJ=`bc <<< "scale=2; $OSSIFY_SONG_SECS - 3"`
+            OSSIFY_SONG_SECS_ADJ=`bc <<< "scale=2; $OSSIFY_SONG_SECS - $OSSIFY_SONG_COMP"`
         fi
 
         # song play
@@ -177,9 +188,9 @@ function ossify() {
             RANDOM_DIFF=$RANDOM%${ossify_rand_diff}
             if [ $OSSIFY_PY_MATH ]
             then
-                OSSIFY_RAND_SKIP_TIME=`python -c "print ${ossify_rand_min}+$RANDOM_DIFF"`
+                OSSIFY_RAND_SKIP_TIME=`python -c "print ${ossify_rand_min}+$RANDOM_DIFF-$OSSIFY_SKIP_COMP"`
             else
-                OSSIFY_RAND_SKIP_TIME=`bc <<< "scale=2; ${ossify_rand_min}+$RANDOM_DIFF"`
+                OSSIFY_RAND_SKIP_TIME=`bc <<< "scale=2; ${ossify_rand_min}+$RANDOM_DIFF-$OSSIFY_SKIP_COMP"`
             fi
 
             ossify_sleep $OSSIFY_RAND_SKIP_TIME
@@ -194,9 +205,9 @@ function ossify() {
             # adjust
             if [ $OSSIFY_PY_MATH ]
             then
-                OSSIFY_SKIP_TIME_ADJ=`python -c "print $OSSIFY_SKIP_TIME - 1"`
+                OSSIFY_SKIP_TIME_ADJ=`python -c "print $OSSIFY_SKIP_TIME-$OSSIFY_SKIP_COMP"`
             else
-                OSSIFY_SKIP_TIME_ADJ=`bc <<< "scale=2; $OSSIFY_SKIP_TIME - 1"`
+                OSSIFY_SKIP_TIME_ADJ=`bc <<< "scale=2; $OSSIFY_SKIP_TIME-$OSSIFY_SKIP_COMP"`
             fi
             ossify_sleep "$OSSIFY_SKIP_TIME_ADJ"
             spotify pause
