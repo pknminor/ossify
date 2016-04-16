@@ -29,7 +29,7 @@ Might not be as useful for you depending on your listening style.
 >
 >  Usage:
 >
->      ossify <playlist-name> <time-per-song> <number-of-songs> <theo-mode, aka your RJ> <quit-after> "<log-location>"
+>      ossify <playlist-name> <time-per-song> <number-of-songs> <theo-mode, aka your RJ> <quit-after> <log-location>
 >
 >      <playlist-name>   = Playlist name
 >      <time-per-song>   = (0-180), switch time in seconds
