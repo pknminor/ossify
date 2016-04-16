@@ -130,7 +130,7 @@ function ossify() {
       ossify_rand_max=${OSSIFY_SONG_SECS_ADJ}
       ossify_rand_diff=$((${ossify_rand_max}-${ossify_rand_min}+1))
 
-      OSSIFY_RAND_SKIP_TIME=$(( min + RANDOM%${ossify_rand_diff} ))
+      OSSIFY_RAND_SKIP_TIME=$(( ossify_rand_min + RANDOM%${ossify_rand_diff} ))
 
       if [ $OSSIFY_DEBUG ]
       then
