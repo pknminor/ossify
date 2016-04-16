@@ -16,13 +16,13 @@ Might not be as useful for you depending on your listening style.
 - Optional: NoSleep(http://www.macupdate.com/app/mac/37991/nosleep)
 
 # Instructions
-1. source ossify.bash from your ${HOME}/.bashrc
+### source ossify.bash from your ${HOME}/.bashrc
 
-2. run ossify
+### run ossify
 
-2.1  Start a playlist or an artist page on the Spotify GUI, with or without shuffle.
+#### Start a playlist or an artist page on the Spotify GUI, with or without shuffle.
 
-2.2  Launch ossify from the terminal.
+####  Launch ossify from the terminal.
 
 >  For example,
 >  ossify ramones 45 30 3 0 ~/ossify_logs
@@ -44,6 +44,6 @@ Might not be as useful for you depending on your listening style.
 >      <log-location>    = Logfile path, default is HOME/ossify_logs
 >
 
-3. ossify will write out a file with your listening history. eg. ramones_04-15-16-17:54:10.txt for your future reference.
+### ossify will write out a file with your listening history. eg. ramones_04-15-16-17:54:10.txt for your future reference.
 
 ## Have fun!
