@@ -47,21 +47,19 @@ function ossify() {
   else
     touch ${OSSIFY_OUT_FILE}
     echo "Creating file ${OSSIFY_OUT_FILE}"
-
-    if [ ! -e $OSSIFY_OUT_FILE ]
+    if [ ! -e ${OSSIFY_OUT_FILE} ]
     then
       echo "Error: Unable to create ${OSSIFY_OUT_FILE}! Exiting.."
     fi
   fi
-  # the playbook begins...
-  echo "---OSSIFY PLAY HISTORY----"                        >> $OSSIFY_OUT_FILE
-  echo "OSSIFY_PLAYLIST_NAME: ${OSSIFY_PLAYLIST_NAME}"     >> $OSSIFY_OUT_FILE
-  echo "OSSIFY_SKIP_TIME:     ${OSSIFY_SKIP_TIME}"         >> $OSSIFY_OUT_FILE
-  echo "OSSIFY_NUM_SONGS:     ${OSSIFY_NUM_SONGS}"         >> $OSSIFY_OUT_FILE
-  echo "OSSIFY_THEO_MODE:     ${OSSIFY_THEO_MODE}"         >> $OSSIFY_OUT_FILE
-  echo "OSSIFY_QUIT_AFTER:    ${OSSIFY_QUIT_AFTER}"        >> $OSSIFY_OUT_FILE
-  echo "OSSIFY_OUT_LOC:       ${OSSIFY_OUT_LOC}"           >> $OSSIFY_OUT_FILE
-  echo "--------------------------"                        >> $OSSIFY_OUT_FILE
+  echo "---OSSIFY PLAY HISTORY----"                        >> ${OSSIFY_OUT_FILE} # the playbook begins...
+  echo "OSSIFY_PLAYLIST_NAME: ${OSSIFY_PLAYLIST_NAME}"     >> ${OSSIFY_OUT_FILE}
+  echo "OSSIFY_SKIP_TIME:     ${OSSIFY_SKIP_TIME}"         >> ${OSSIFY_OUT_FILE}
+  echo "OSSIFY_NUM_SONGS:     ${OSSIFY_NUM_SONGS}"         >> ${OSSIFY_OUT_FILE}
+  echo "OSSIFY_THEO_MODE:     ${OSSIFY_THEO_MODE}"         >> ${OSSIFY_OUT_FILE}
+  echo "OSSIFY_QUIT_AFTER:    ${OSSIFY_QUIT_AFTER}"        >> ${OSSIFY_OUT_FILE}
+  echo "OSSIFY_OUT_LOC:       ${OSSIFY_OUT_LOC}"           >> ${OSSIFY_OUT_FILE}
+  echo "--------------------------"                        >> ${OSSIFY_OUT_FILE}
 
   for VAR in `seq 1 ${OSSIFY_NUM_SONGS}`
   do
@@ -108,13 +106,13 @@ function ossify() {
     fi
 
     # keep track of what you listened to
-    echo "PLAY #${VAR}"                  >> $OSSIFY_OUT_FILE
-    echo "--------------------------"    >> $OSSIFY_OUT_FILE
-    spotify share                        >> $OSSIFY_OUT_FILE
-    echo "--------------------------"    >> $OSSIFY_OUT_FILE
-    spotify info                         >> $OSSIFY_OUT_FILE
-    echo "--------------------------"    >> $OSSIFY_OUT_FILE
-    echo "----END-OF-TRACK----------"    >> $OSSIFY_OUT_FILE
+    echo "PLAY #${VAR}"                  >> ${OSSIFY_OUT_FILE}
+    echo "--------------------------"    >> ${OSSIFY_OUT_FILE}
+    spotify share                        >> ${OSSIFY_OUT_FILE}
+    echo "--------------------------"    >> ${OSSIFY_OUT_FILE}
+    spotify info                         >> ${OSSIFY_OUT_FILE}
+    echo "--------------------------"    >> ${OSSIFY_OUT_FILE}
+    echo "----END-OF-TRACK----------"    >> ${OSSIFY_OUT_FILE}
 
     # song play
     if [ $OSSIFY_SKIP_TIME == "f" ]
@@ -155,7 +153,7 @@ function ossify() {
   done
 
   # end of playbook
-  echo "----END-------------------"    >> $OSSIFY_OUT_FILE
+  echo "----END-------------------"    >> ${OSSIFY_OUT_FILE}
 
   if [ $OSSIFY_QUIT_AFTER -eq 1 ]
   then
