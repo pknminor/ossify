@@ -16,6 +16,7 @@ sac "TEST1"
 
 ossify test1 f 1 1 0 ${HOME}/ossify_logs_test
 
+spotify quit
 sac "End test"
 
 exit 0
