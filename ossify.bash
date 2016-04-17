@@ -22,10 +22,7 @@ function ossify_theo_sign_off() {
 }
 
 function ossify_sleep() {
-    if [ $OSSIFY_DEBUG ]
-    then
-      echo "sleeping for ${1}seconds"
-    fi
+    ossify_dp "sleeping for ${1}seconds"
     sleep "${1}s"
 }
 
@@ -188,16 +185,13 @@ function ossify() {
         # CHECKME
         elif [ $OSSIFY_SKIP_TIME == "r" ]
         then
-            if [ $OSSIFY_DEBUG ]
-            then
-                echo "OSSIFY: RANDOM TIME AUDIO PLAYBACK MODE"
-            fi
-            ossify_rand_min=30
-            ossify_rand_max=${OSSIFY_SONG_SECS_ADJ}
-            ossify_rand_diff=`bc <<< "scale=2; ${ossify_rand_max}-${ossify_rand_min}+1"`
+            ossify_dp "OSSIFY: RANDOM TIME AUDIO PLAYBACK MODE"
+            OSSIFY_RAND_MIN=30
+            OSSIFY_RAND_MAX=${OSSIFY_SONG_SECS_ADJ}
+            OSSIFY_RAND_DIFF=`bc <<< "scale=2; ${OSSIFY_RAND_MAX}-${OSSIFY_RAND_MIN}+1"`
 
-            RANDOM_DIFF=$RANDOM%${ossify_rand_diff}
-            OSSIFY_RAND_SKIP_TIME=`bc <<< "scale=2; ${ossify_rand_min}+$RANDOM_DIFF-$OSSIFY_SKIP_COMP"`
+            RANDOM_DIFF=$RANDOM%${OSSIFY_RAND_DIFF}
+            OSSIFY_RAND_SKIP_TIME=`bc <<< "scale=2; ${OSSIFY_RAND_MIN}+$RANDOM_DIFF-$OSSIFY_SKIP_COMP"`
 
             ossify_sleep $OSSIFY_RAND_SKIP_TIME
             spotify pause
