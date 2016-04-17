@@ -2,7 +2,11 @@
 
 export OSSIFY_DEBUG=1
 
+#
 source ossify.bash
-source $1
+
+rm -rf ${1}_run.log
+
+source $1 | tee ${1}_run.log
 
 exit 0
