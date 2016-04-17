@@ -17,6 +17,52 @@ function ossify_sleep() {
     sleep "${1}s"
 }
 
+function ossify_f2i() {
+    local float=$1
+    echo ${float%.*}
+}
+
+function ossify_pause_at_next_start() {
+    # continuously poll spoitfy info and keep track of the diff between song seconds and seconds played
+    # when diff is close enough to 0 pause for all RJ modes
+    while [ 1 ]
+    do
+        local ossify_seconds_played=`spotify info |  sed -n 's/Seconds played:[[:space:]]*\(.*\)/\1/p'`
+        if [ $OSSIFY_DEBUG ]
+        then
+          echo "OSSIFY_PAUSE_AT_NEXT_START: seconds played $ossify_seconds_played"
+        fi
+        local ossify_seconds_played_int=$(ossify_f2i $ossify_seconds_played)
+        local ossify_song_seconds_int=$(ossify_f2i ${1})
+        if [ $OSSIFY_DEBUG ]
+        then
+          echo "OSSIFY_PAUSE_AT_NEXT_START: seconds played int $ossify_seconds_played_int"
+        fi
+        local ossify_seconds_left=$(( $ossify_song_seconds_int - $ossify_seconds_played_int ))
+
+        if [ $OSSIFY_DEBUG ]
+        then
+          echo "OSSIFY_PAUSE_AT_NEXT_START: seconds left $ossify_seconds_left"
+        fi
+        # convert to int or find float operators
+        if [ $ossify_seconds_left -lt 2 ]
+        then
+          if [ $OSSIFY_DEBUG ]
+          then
+            echo "OSSIFY_PAUSE_AT_NEXT_START: seconds left $ossify_seconds_left"
+          fi
+          spotify pause
+          if [ $OSSIFY_DEBUG ]
+          then
+            echo "OSSIFY_PAUSE_AT_NEXT_START: after pause"
+          fi
+          break
+        fi
+        # CHECKME
+        sleep {0.1}s
+    done
+}
+
 function ossify() {
     # args
     OSSIFY_PLAYLIST_NAME="${1}"
@@ -74,9 +120,11 @@ function ossify() {
 
     for VAR in `seq 1 ${OSSIFY_NUM_SONGS}`
     do
-        # next song
-        spotify next
-        spotify pause
+        if [ ! $OSSIFY_SKIP_TIME == "f" ]
+        then
+          # next song
+          spotify next
+        fi
 
         # get info
         OSSIFY_SONG_NAME=`spotify info |  sed -n 's/Track:[[:space:]]*\(.*\)/\1/p'`
@@ -89,6 +137,8 @@ function ossify() {
         else
             OSSIFY_SONG_SECS=`bc <<< "scale=2; ${OSSIFY_SONG_INFO_SECS}/1000"`
         fi
+
+        ossify_pause_at_next_start ${OSSIFY_SONG_SECS} &
 
         # dbg print
         if [ $OSSIFY_DEBUG ]
@@ -236,6 +286,9 @@ function ossify() {
         spotify quit
     fi
 }
+
+
+
 
 
 

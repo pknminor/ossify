@@ -3,7 +3,7 @@
 Ossify, your Spotify listening companion, eases the *tedium* of music discovery and recollection.
 The idea is to automate the RJ(Radio Jockey) experience and keep track of what you had listened to.
 
-Change songs after a certain amount of time, get artist and song information via audio feedback during song play.
+Change songs after a *(un)certain* amount of time, get artist and song information via audio feedback during song play.
 
 # Prerequisites
 - https://github.com/hnarayanan/shpotify
@@ -39,7 +39,7 @@ Change songs after a certain amount of time, get artist and song information via
 > >                          4, Off*, Theo sleeps for a while
 > >      <quit-after>      = 0, Keep listening to the music..
 > >                          1, Quit after <number-of-songs>, Theo speaks at the end of all play(s)
-> >      <log-location>    = Play history, default is HOME/ossify_logs
+> >      <log-location>    = Play history file, default is HOME/ossify_logs
 >
 >
 >     ossify will write out a file with your listening history. eg. ramones_04-15-16-17:54:10.txt for your future reference.

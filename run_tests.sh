@@ -29,11 +29,11 @@ spotify pause
 #
 sac "TEST3: Skip Time Modes"
 
-sac "Testing Full song mode, 3 songs armin" #UPDATEME
+sac "Testing Full song mode, 3 songs fyi" #UPDATEME
 ossify hist5 f 3 3 0 ${HOME}/ossify_logs_test
 spotify pause
 
-sac "Testing Random skip mode, 3 songs armin" #UPDATEME
+sac "Testing Random skip mode, 3 songs fyi" #UPDATEME
 ossify hist6 r 3 3 0 ${HOME}/ossify_logs_test
 spotify pause
 
@@ -46,5 +46,8 @@ spotify pause
 #sleep 2s
 
 sac "End of all tests"
+
+# Current Issues
+
 
 exit 0
