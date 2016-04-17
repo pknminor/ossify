@@ -50,14 +50,13 @@ function ossify_pause_at_next_start() {
 
         ossify_dp "OSSIFY_PAUSE_AT_NEXT_START: seconds left $ossify_seconds_left_int\n"
 
-
-        # convert to int or find float operators
         if [ $ossify_seconds_left_int -lt 2 ]
         then
             ossify_dp "OSSIFY_PAUSE_AT_NEXT_START: seconds left less than 2"
             spotify pause
             ossify_dp "OSSIFY_PAUSE_AT_NEXT_START: after pause\n"
-          break
+            # FIXME
+            break
         elif [ $OSSIFY_SKIP_TIME == "r" ]
         then
             ossify_dp "OSSIFY: RANDOM TIME AUDIO PLAYBACK MODE\n"
