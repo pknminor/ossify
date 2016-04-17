@@ -55,7 +55,7 @@ function ossify_pause_at_next_start() {
             ossify_dp "OSSIFY_PAUSE_AT_NEXT_START: after pause\n"
             # FIXME
             break
-        elif [ $OSSIFY_SKIP_TIME == "r" ]
+        elif [ $ossify_skip_time == "r" ]
         then
             ossify_dp "OSSIFY: RANDOM TIME AUDIO PLAYBACK MODE\n"
             ossify_rand_min=30
@@ -68,7 +68,7 @@ function ossify_pause_at_next_start() {
             ossify_sleep $ossify_rand_skip_time
             spotify pause
 
-        elif [ $OSSIFY_SKIP_TIME != "f" ] # regular skip delay
+        elif [ $ossify_skip_time != "f" ] # regular skip delay
         then
             ossify_dp "OSSIFY: CONSTANT TIME AUDIO PLAYBACK MODE\n"
 
