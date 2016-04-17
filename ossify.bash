@@ -27,8 +27,6 @@ function ossify_sleep() {
 }
 
 function ossify_pause_at_next_start() {
-    # continuously poll spoitfy info and keep track of the diff between song seconds and seconds played
-    # when diff is close enough to 0 pause for all RJ modes
     local ossigy_song_secs_flt=$1
     local ossify_song_secs_adj=$2
     local ossify_skip_time_adj=$3
