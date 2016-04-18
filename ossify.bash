@@ -30,7 +30,7 @@ function ossify_sleep() {
     sleep "${1}s"
 }
 
-# make song stop playing, if its playing or currently paused, "spotify pause" acts like play/pause
+# definite pause, not used for now
 function ossify_pause() {
     # CHECKME
     local ossify_seconds_played_int_before=$(ossify_f2i "`spotify info |  sed -n 's/Seconds played:[[:space:]]*\(.*\)/\1/p'`")
