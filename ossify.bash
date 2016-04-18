@@ -15,6 +15,7 @@ function ossify_dp() {
 function ossify_theo_said() {
     echo "THEO_SAYS: ${1}"
     say $1
+    sleep 2s
 }
 
 function ossify_theo_sign_off() {
