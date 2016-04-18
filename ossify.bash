@@ -8,7 +8,7 @@ function ossify_f2i() {
 function ossify_dp() {
     if [ $OSSIFY_DEBUG ]
     then
-      printf "$1"
+      printf "\n${1}\n"
     fi
 }
 
@@ -27,8 +27,8 @@ function ossify_sleep() {
 }
 
 function ossify_pause_at_next_start() {
-    local ossigy_song_secs_flt=$1
-    local ossify_song_secs_adj=$2
+    local ossigy_song_seconds_flt=$1
+    local ossify_song_seconds_adj=$2
     local ossify_skip_time_adj=$3
     local ossify_skip_comp=$4
     local ossify_rand_skip_time=$5
@@ -40,7 +40,7 @@ function ossify_pause_at_next_start() {
         ossify_dp "OSSIFY_PAUSE_AT_NEXT_START: seconds played $ossify_seconds_played\n"
 
         local ossify_seconds_played_int=$(ossify_f2i $ossify_seconds_played)
-        local ossify_song_seconds_int=$(ossify_f2i ${ossigy_song_secs_flt})
+        local ossify_song_seconds_int=$(ossify_f2i ${ossigy_song_seconds_flt})
 
         ossify_dp "OSSIFY_PAUSE_AT_NEXT_START: seconds played int $ossify_seconds_played_int\n"
 
@@ -48,18 +48,21 @@ function ossify_pause_at_next_start() {
 
         ossify_dp "OSSIFY_PAUSE_AT_NEXT_START: seconds left $ossify_seconds_left_int\n"
 
-        if [ $ossify_seconds_left_int -lt 2 ]
+        if [ $ossify_skip_time == "f" ]
+        then
+            continue
+        elif [ $ossify_seconds_left_int -lt 2 ]
         then
             ossify_dp "OSSIFY_PAUSE_AT_NEXT_START: seconds left less than 2"
             spotify pause
-            ossify_dp "OSSIFY_PAUSE_AT_NEXT_START: after pause\n"
+            ossify_dp "OSSIFY_PAUSE_AT_NEXT_START: after pause"
             # FIXME
             break
         elif [ $ossify_skip_time == "r" ]
         then
-            ossify_dp "OSSIFY: RANDOM TIME AUDIO PLAYBACK MODE\n"
+            ossify_dp "OSSIFY: RANDOM TIME AUDIO PLAYBACK MODE"
             ossify_rand_min=30
-            ossify_rand_max=${ossify_song_secs_adj}
+            ossify_rand_max=${ossify_song_seconds_adj}
             ossify_rand_diff=`bc <<< "scale=2; ${ossify_rand_max}-${ossify_rand_min}+1"`
 
             RANDOM_DIFF=$RANDOM%${ossify_rand_diff}
@@ -70,11 +73,31 @@ function ossify_pause_at_next_start() {
 
         elif [ $ossify_skip_time != "f" ] # regular skip delay
         then
-            ossify_dp "OSSIFY: CONSTANT TIME AUDIO PLAYBACK MODE\n"
+            ossify_dp "OSSIFY: CONSTANT TIME AUDIO PLAYBACK MODE"
 
             # adjust
             ossify_skip_time_adj=`bc <<< "scale=2; $ossify_skip_time-$ossify_skip_comp"`
             ossify_sleep "$ossify_skip_time_adj"
+            spotify pause
+        fi
+        sleep {0.01}s
+    done
+ }
+
+function ossify_poll_seconds_played() {
+    #true
+    while [ 1 ]
+    do
+        local ossify_seconds_played_int=$(ossify_f2i "`spotify info |  sed -n 's/Seconds played:[[:space:]]*\(.*\)/\1/p'`")
+        local ossify_song_info_seconds=`spotify info | sed -n 's/Seconds:[[:space:]]*\(.*\)/\1/p'`
+        local ossify_song_info_seconds_post=`bc <<< "scale=2; ${ossify_song_info_seconds}/1000"`
+        local ossify_song_info_seconds_int=$(ossify_f2i $ossify_song_info_seconds_post)
+        local ossify_seconds_left=$(( $ossify_song_info_seconds_int - $ossify_seconds_played_int ))
+        ossify_dp "OSSIFY_POLL_SECONDS_PLAYED: ossify_seconds_left $ossify_seconds_left ossify_song_info_seconds_int $ossify_song_info_seconds_int ossify_seconds_played_int $ossify_seconds_played_int  ossify_song_info_seconds $ossify_song_info_seconds\n"
+        if [ $ossify_seconds_left -lt 4 ]
+        then
+            ossify_dp "OSSIFY_POLL_SECONDS_PLAYED: LESS THAN 3 seconds \n"
+            spotify next
             spotify pause
         fi
         sleep {0.01}s
@@ -111,7 +134,6 @@ function ossify() {
         OSSIFY_QUIT_AFTER:    ${OSSIFY_QUIT_AFTER}    \n \
         OSSIFY_OUT_LOC:       ${OSSIFY_OUT_LOC}       \n \
         "
-
     # output log
     OSSIFY_TIMESTAMP=`date +"%m-%d-%y-%T"`
     OSSIFY_OUT_FILE="${OSSIFY_OUT_LOC}/${OSSIFY_PLAYLIST_NAME}_${OSSIFY_TIMESTAMP}.txt"
@@ -139,6 +161,9 @@ function ossify() {
 
     for VAR in `seq 1 ${OSSIFY_NUM_SONGS}`
     do
+        # cont debug print
+        ossify_poll_seconds_played &
+
         if [ ! $OSSIFY_SKIP_TIME == "f" ]
         then
           # next song
@@ -149,16 +174,16 @@ function ossify() {
         # get info
         OSSIFY_SONG_NAME=`spotify info |  sed -n 's/Track:[[:space:]]*\(.*\)/\1/p'`
         OSSIFY_AARTIST=`spotify info | sed -n 's/Album Artist:[[:space:]]*\(.*\)/\1/p'`
-        OSSIFY_SONG_INFO_SECS=`spotify info | sed -n 's/Seconds:[[:space:]]*\(.*\)/\1/p'`
-        OSSIFY_SONG_SECS=`bc <<< "scale=2; ${OSSIFY_SONG_INFO_SECS}/1000"`
+        OSSIFY_SONG_INFO_SECONDS=`spotify info | sed -n 's/Seconds:[[:space:]]*\(.*\)/\1/p'`
+        OSSIFY_SONG_SECONDS=`bc <<< "scale=2; ${OSSIFY_SONG_INFO_SECONDS}/1000"`
 
         # dbg print
-        ossify_dp "                                   \n \
+        ossify_dp "                                      \
             OSSIFY_SKIP_TIME = ${OSSIFY_SKIP_TIME}    \n \
             OSSIFY_SONG_NAME = ${OSSIFY_SONG_NAME}    \n \
             OSSIFY_AARTIST   = ${OSSIFY_AARTIST}      \n \
             OSSIFY_THEO_MODE = ${OSSIFY_THEO_MODE}    \n \
-            OSSIFY_SONG_SECS = ${OSSIFY_SONG_SECS}    \n \
+            OSSIFY_SONG_SECONDS = ${OSSIFY_SONG_SECONDS}    \n \
             "
 
         # standard spiel, more info?
@@ -171,9 +196,12 @@ function ossify() {
             ossify_dp "OSSIFY: CLASSIC MODE"
             ossify_theo_said "$OSSIFY_THEO_SAYS"
         fi
-
-        # start
-        spotify play
+        # IMPORTANT # FIXME: only working on classic mode starting from pos 0
+        if [ $OSSIFY_THEO_MODE -eq 1 ]
+        then
+          spotify pos 0
+          spotify play
+        fi
 
         # armin mode, overlapped beginning
         if [ $OSSIFY_THEO_MODE -eq 2 ]
@@ -182,7 +210,7 @@ function ossify() {
 
             ossify_sleep "$OSSIFY_ARMIN_DELAY"
             ossify_theo_said "$OSSIFY_THEO_SAYS"
-            OSSIFY_SONG_SECS=`bc <<< "scale=2; $OSSIFY_SONG_SECS - $OSSIFY_ARMIN_DELAY"`
+            OSSIFY_SONG_SECONDS=`bc <<< "scale=2; $OSSIFY_SONG_SECONDS - $OSSIFY_ARMIN_DELAY"`
             # adjust skip time
             OSSIFY_SKIP_TIME=`bc <<< "scale=2; $OSSIFY_SKIP_TIME - $OSSIFY_ARMIN_DELAY"`
         fi
@@ -196,19 +224,24 @@ function ossify() {
         echo "--------------------------"    >> ${OSSIFY_OUT_FILE}
         echo "----END-OF-TRACK----------"    >> ${OSSIFY_OUT_FILE}
 
-        OSSIFY_SONG_SECS_ADJ=`bc <<< "scale=2; $OSSIFY_SONG_SECS - $OSSIFY_SONG_COMP"`
+        OSSIFY_SONG_SECONDS_ADJ=`bc <<< "scale=2; $OSSIFY_SONG_SECS - $OSSIFY_SONG_COMP"`
 
         # FIXME # IMPROVEME
-        ossify_pause_at_next_start ${OSSIFY_SONG_SECS} ${OSSIFY_SONG_SECS_ADJ} ${OSSIFY_SKIP_TIME_ADJ} ${OSSIFY_SKIP_COMP} ${OSSIFY_RAND_SKIP_TIME} ${OSSIFY_SKIP_TIME} &
+        # parllel process for continuous debuug prints and spotify pauses,
+        #ossify_pause_at_next_start "${OSSIFY_SONG_SECS}" "${OSSIFY_SONG_SECS_ADJ}" "${OSSIFY_SKIP_TIME_ADJ}" "${OSSIFY_SKIP_COMP}" "${OSSIFY_RAND_SKIP_TIME}" "${OSSIFY_SKIP_TIME}" &
+
+
+        # s
+
+
 
         # fyi mode
         if [ $OSSIFY_THEO_MODE -eq 3 ]
         then
-            ossify_dp "OSSIFY: FYI MODE\n"
+            ossify_dp "OSSIFY: FYI MODE"
             OSSIFY_THEO_SAYS="For Your Information... that was ${OSSIFY_THEO_SAYS}"
             ossify_theo_said "$OSSIFY_THEO_SAYS"
         fi
-
     done
 
     echo "----END-------------------"    >> ${OSSIFY_OUT_FILE} # end of playbook
