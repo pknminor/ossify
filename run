@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export OSSIFY_DEBUG=1
+#export OSSIFY_DEBUG=1
 
 #
 source ossify.bash
