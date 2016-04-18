@@ -6,7 +6,8 @@ function ossify_f2i() {
 }
 
 function ossify_poll_sleep() {
-    sleep 0.2s
+    #sleep 0.2s
+    sleep 0.5s
 }
 
 function ossify_dp() {
@@ -169,6 +170,7 @@ function ossify() {
     echo "OSSIFY_OUT_LOC:       ${OSSIFY_OUT_LOC}"           >> ${OSSIFY_OUT_FILE}
     echo "--------------------------"                        >> ${OSSIFY_OUT_FILE}
 
+    # INTRO MESSAGE?
     spotify next
     for VAR in `seq 1 ${OSSIFY_NUM_SONGS}`
     do
@@ -204,6 +206,7 @@ function ossify() {
             OSSIFY_RANDOM_DIFF=$RANDOM%${OSSIFY_RAND_DIFF}
             OSSIFY_RAND_SKIP_TIME=`bc <<< "scale=2; ${OSSIFY_RAND_MIN}+$OSSIFY_RANDOM_DIFF-$OSSIFY_SKIP_COMP"`
             OSSIFY_SKIP_TIME=$(ossify_f2i ${OSSIFY_RAND_SKIP_TIME})
+            echo "OSSIFY: OSSIFY_RAND_SKIP_TIME $OSSIFY_SKIP_TIME"
         fi
         ossify_dp "OSSIFY: OSSIFY_SKIP_TIME $OSSIFY_SKIP_TIME"
 
@@ -251,7 +254,7 @@ function ossify() {
                 ossify_pause_after_skip_time $OSSIFY_SKIP_TIME
             fi
 
-            ossify_theo_said "$OSSIFY_TRACK_INFO"
+            ossify_theo_said "For your information that was, $OSSIFY_TRACK_INFO"
 
         elif [ $OSSIFY_THEO_MODE -eq 4 ]
         then
