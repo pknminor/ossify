@@ -15,7 +15,6 @@ function ossify_dp() {
 function ossify_theo_said() {
     echo "THEO_SAYS: ${1}"
     say $1
-    sleep 2s
 }
 
 function ossify_theo_sign_off() {
@@ -89,14 +88,20 @@ function ossify_sleep() {
 
 # make song stop playing, if its playing or currently paused, "spotify pause" acts like play/pause
 function ossify_pause() {
-    local ossigy_pause_sleep_seconds=1
+    # CHECKME
+    local ossify_pause_sleep_seconds=1
     local ossify_seconds_played_int_before=$(ossify_f2i "`spotify info |  sed -n 's/Seconds played:[[:space:]]*\(.*\)/\1/p'`")
     sleep ${ossify_pause_sleep_seconds}s
     local ossify_seconds_played_int_after=$(ossify_f2i "`spotify info |  sed -n 's/Seconds played:[[:space:]]*\(.*\)/\1/p'`")
+    ossify_dp "ossify_seconds_played_int_before $ossify_seconds_played_int_before ossify_seconds_played_int_after $ossify_seconds_played_int_after"
     if [ $ossify_seconds_played_int_before -ne $ossify_seconds_played_int_after ]
     then
         spotify pause
     fi
+}
+
+function ossify_poll_sleep() {
+    sleep 0.2s
 }
 
 function ossify_poll_seconds_played() {
@@ -108,7 +113,7 @@ function ossify_poll_seconds_played() {
         local ossify_song_info_seconds_int=$(ossify_f2i $ossify_song_info_seconds_post)
         local ossify_seconds_left=$(( $ossify_song_info_seconds_int - $ossify_seconds_played_int ))
         ossify_dp "OSSIFY_POLL_SECONDS_PLAYED: ossify_seconds_left $ossify_seconds_left ossify_song_info_seconds_int $ossify_song_info_seconds_int ossify_seconds_played_int $ossify_seconds_played_int  ossify_song_info_seconds $ossify_song_info_seconds\n"
-        sleep {0.01}s
+        ossify_poll_sleep
     done
 }
 
@@ -127,10 +132,10 @@ function ossify_pause_at_next_start() {
             ossify_dp "OSSIFY_PAUSE_AT_NEXT_START: ossify_seconds_left $ossify_seconds_left is less than the threshold ossify_seconds_left_thresh $ossify_seconds_left_thresh\n"
             ossify_dp "OSSIFY_PAUSE_AT_NEXT_START: going to next and pausing playback"
             spotify next
-            ossify_pause
+            spotify pause
             break
         fi
-        sleep {0.01}s
+        ossify_poll_sleep
     done
 }
 
@@ -152,16 +157,15 @@ function ossify_pause_after_skip_time() {
             ossify_dp "OSSIFY_PAUSE_AFTER_SKIP_TIME: ossify_seconds_left $ossify_seconds_left is less than the threshold ossify_seconds_left_thresh $ossify_seconds_left_thresh\n"
             ossify_dp "OSSIFY_PAUSE_AFTER_SKIP_TIME: going to next and pausing playback"
             spotify next
-            ossify_pause
+            spotify pause
             break
         fi
-        sleep {0.01}s
+        ossify_poll_sleep
     done
 }
 
-
 # 
-function ossify_pause_at_curr_song_start() {
+function ossify_pause_at_start() {
     spotify pos 0
     ossify_pause
 }
@@ -263,8 +267,7 @@ function ossify() {
         if [ $OSSIFY_THEO_MODE -eq 1 ]
         then
             ossify_dp "OSSIFY: CLASSIC MODE"
-            spotify pos 0
-            ossify_pause
+            ossify_pause_song_at_start
             ossify_theo_said "$OSSIFY_TRACK_INFO"
             spotify play
 
@@ -278,8 +281,7 @@ function ossify() {
         elif [ $OSSIFY_THEO_MODE -eq 2 ]# overlapped beginning
         then
             ossify_dp "OSSIFY: ARMIN MODE"
-            spotify pos 0
-            ossify_pause
+            ossify_pause_at_start
             spotify play
 
             ossify_sleep "$OSSIFY_ARMIN_DELAY"
@@ -294,8 +296,7 @@ function ossify() {
         elif [ $OSSIFY_THEO_MODE -eq 3 ]
         then
             ossify_dp "OSSIFY: FYI MODE"
-            spotify pos 0
-            ossify_pause
+            ossify_pause_at_start
             spotify play
 
             if [ $OSSIFY_SKIP_TIME == "f" ]
@@ -310,7 +311,7 @@ function ossify() {
         elif [ $OSSIFY_THEO_MODE -eq 4 ]
         then
             ossify_dp "OSSIFY: THEO OFF MODE"
-            spotify pos 0
+            ossify_pause_at_start
             spotify play
 
             if [ $OSSIFY_SKIP_TIME == "f" ]
