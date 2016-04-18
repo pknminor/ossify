@@ -124,6 +124,7 @@ function ossify() {
     OSSIFY_ARMIN_DELAY=6
     OSSIFY_SKIP_COMP=3
     OSSIFY_RAND_MIN=30
+    OSSIFY_RAND_MIN_SONG_LENGTH=30
 
     if [ -z $OSSIFY_SKIP_TIME ] || [ -z $OSSIFY_PLAYLIST_NAME ] || [ -z $OSSIFY_NUM_SONGS ] || [ -z $OSSIFY_THEO_MODE ] || [ -z $OSSIFY_QUIT_AFTER ] || [ -z $OSSIFY_OUT_LOC ]
     then
@@ -197,7 +198,7 @@ function ossify() {
         if [ $OSSIFY_SKIP_TIME == "r" ]
         then
             ossify_dp "OSSIFY: RANDOM TIME AUDIO PLAYBACK MODE"
-            OSSIFY_RAND_MAX=${OSSIFY_SONG_SECONDS_INT}
+            OSSIFY_RAND_MAX=${OSSIFY_SONG_SECONDS_INT}-${OSSIFY_RAND_MIN_SONG_LENGTH}
             OSSIFY_RAND_DIFF=`bc <<< "scale=2; ${OSSIFY_RAND_MAX}-${OSSIFY_RAND_MIN}+1"`
 
             OSSIFY_RANDOM_DIFF=$RANDOM%${OSSIFY_RAND_DIFF}
