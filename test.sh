@@ -2,7 +2,9 @@
 
 # Run this script from ossify/
 
-#export OSSIFY_DEBUG=1
+export OSSIFY_DEBUG=0
+export OSSIFY_DEBUG1=1
+export OSSIFY_DEBUG2=0
 
 source ossify.bash
 
@@ -14,13 +16,13 @@ function sac {
 # test exit after play
 sac "TEST1"
 
-ossify test1 f 3 1 0 ${HOME}/ossify_logs_test
+ossify test1 r 3 1 0 ${HOME}/ossify_logs_test
+
+# ISSUE and IMPROVEMENTS LOG
+# IS:
+# IMP: more sleep and less info in polls, might not be needed
 
 #spotify quit
 #sac "End test"
-
-# ISSUE and IMPROVEMENTS LOG
-# IS:  same random skip time same for all songs?, since song lengths are diff
-# IMP: more sleep and less info in polls, might not be needed
 
 exit 0

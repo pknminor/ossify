@@ -197,7 +197,7 @@ function ossify() {
             OSSIFY_RANDOM_DIFF=$RANDOM%${OSSIFY_RAND_DIFF}
             OSSIFY_RAND_SKIP_TIME=`bc <<< "scale=2; ${OSSIFY_RAND_MIN}+$OSSIFY_RANDOM_DIFF-$OSSIFY_SKIP_COMP"`
             OSSIFY_SKIP_TIME=$(ossify_f2i ${OSSIFY_RAND_SKIP_TIME})
-            echo "OSSIFY: OSSIFY_RAND_SKIP_TIME $OSSIFY_SKIP_TIME OSSIFY_RAND_MAX $OSSIFY_RAND_MAX  OSSIFY_RAND_DIFF $OSSIFY_RAND_DIFF OSSIFY_RAND_MIN $OSSIFY_RAND_MIN"
+            ossify_dp1 "OSSIFY: OSSIFY_RAND_SKIP_TIME $OSSIFY_SKIP_TIME OSSIFY_RAND_MAX $OSSIFY_RAND_MAX  OSSIFY_RAND_DIFF $OSSIFY_RAND_DIFF OSSIFY_RAND_MIN $OSSIFY_RAND_MIN"
         fi
         ossify_dp "OSSIFY: OSSIFY_SKIP_TIME $OSSIFY_SKIP_TIME"
 
@@ -216,6 +216,7 @@ function ossify() {
             else
                 ossify_pause_after_skip_time $OSSIFY_SKIP_TIME
             fi
+
         # overlapped beginning
         elif [ $OSSIFY_THEO_MODE -eq 2 ]
         then
@@ -232,6 +233,7 @@ function ossify() {
             else
                 ossify_pause_after_skip_time $OSSIFY_SKIP_TIME
             fi
+
         elif [ $OSSIFY_THEO_MODE -eq 3 ]
         then
             ossify_dp "OSSIFY: FYI MODE"
@@ -295,12 +297,6 @@ function ossify_dp1() {
     fi
 }
 
-function ossify_dp3() {
-    if [ $OSSIFY_DEBUG3 ]
-    then
-      printf "\n${1}\n"
-    fi
-}
 
 function ossify_theo_said() {
     echo "THEO_SAYS: ${1}"
