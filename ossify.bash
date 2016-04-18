@@ -170,12 +170,16 @@ function ossify() {
     echo "OSSIFY_OUT_LOC:       ${OSSIFY_OUT_LOC}"           >> ${OSSIFY_OUT_FILE}
     echo "--------------------------"                        >> ${OSSIFY_OUT_FILE}
 
+    if [ $OSSIFY_DEBUG ]
+    then
+        # cont debug print
+        ossify_poll_seconds_played &
+    fi
+
     # INTRO MESSAGE?
     spotify next
     for VAR in `seq 1 ${OSSIFY_NUM_SONGS}`
     do
-        # cont debug print
-        ossify_poll_seconds_played &
 
         # get info
         OSSIFY_SONG_NAME=`spotify info |  sed -n 's/Track:[[:space:]]*\(.*\)/\1/p'`
