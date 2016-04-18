@@ -6,8 +6,7 @@ function ossify_f2i() {
 }
 
 function ossify_poll_sleep() {
-    #sleep 0.2s
-    sleep 0.5s
+    sleep 0.2s
 }
 
 function ossify_dp() {
@@ -34,9 +33,8 @@ function ossify_sleep() {
 # make song stop playing, if its playing or currently paused, "spotify pause" acts like play/pause
 function ossify_pause() {
     # CHECKME
-    local ossify_pause_sleep_seconds=1
     local ossify_seconds_played_int_before=$(ossify_f2i "`spotify info |  sed -n 's/Seconds played:[[:space:]]*\(.*\)/\1/p'`")
-    sleep ${ossify_pause_sleep_seconds}s
+    sleep 0.2s
     local ossify_seconds_played_int_after=$(ossify_f2i "`spotify info |  sed -n 's/Seconds played:[[:space:]]*\(.*\)/\1/p'`")
     ossify_dp "ossify_seconds_played_int_before $ossify_seconds_played_int_before ossify_seconds_played_int_after $ossify_seconds_played_int_after"
     if [ $ossify_seconds_played_int_before -ne $ossify_seconds_played_int_after ]
@@ -73,8 +71,8 @@ function ossify_pause_at_next_start() {
             ossify_dp "OSSIFY_PAUSE_AT_NEXT_START: ossify_seconds_left $ossify_seconds_left is less than the threshold ossify_seconds_left_thresh $ossify_seconds_left_thresh\n"
             ossify_dp "OSSIFY_PAUSE_AT_NEXT_START: going to next and pausing playback"
             spotify next
-            # spotify pause
-            ossify_pause
+            spotify pause
+            #ossify_pause
             break
         fi
         ossify_poll_sleep
@@ -100,8 +98,8 @@ function ossify_pause_after_skip_time() {
             ossify_dp "OSSIFY_PAUSE_AFTER_SKIP_TIME: ossify_seconds_left $ossify_seconds_left is less than the threshold ossify_seconds_left_thresh $ossify_seconds_left_thresh\n"
             ossify_dp "OSSIFY_PAUSE_AFTER_SKIP_TIME: going to next and pausing playback"
             spotify next
-            #spotify pause
-            ossify_pause
+            spotify pause
+            #ossify_pause
             break
         fi
         ossify_poll_sleep
@@ -110,7 +108,7 @@ function ossify_pause_after_skip_time() {
 
 # 
 function ossify_pause_at_start() {
-    spotify pos 0
+    #spotify pos 0
     ossify_pause
 }
 
