@@ -9,22 +9,6 @@ function ossify_poll_sleep() {
     sleep 0.2s
 }
 
-function ossify_dp() {
-    if [ $OSSIFY_DEBUG ]
-    then
-      printf "\n${1}\n"
-    fi
-}
-
-function ossify_theo_said() {
-    echo "THEO_SAYS: ${1}"
-    say $1
-}
-
-function ossify_theo_sign_off() {
-    ossify_theo_said "Theo bidding off!"
-}
-
 function ossify_sleep() {
     ossify_dp "sleeping for ${1}seconds"
     sleep "${1}s"
@@ -112,6 +96,7 @@ function ossify_pause_at_start() {
     ossify_pause
 }
 
+# main
 function ossify() {
     # args
     OSSIFY_PLAYLIST_NAME="${1}"
@@ -187,12 +172,16 @@ function ossify() {
         OSSIFY_SONG_SECONDS_INT=$(ossify_f2i ${OSSIFY_SONG_SECONDS})
 
         # dbg print
-        ossify_dp "                                            \
+        ossify_dp1 "                                           \
+            ############################################### \n \
+            SONG#${VAR}                                     \n \
+            ############################################### \n \
             OSSIFY_SKIP_TIME = ${OSSIFY_SKIP_TIME}          \n \
             OSSIFY_SONG_NAME = ${OSSIFY_SONG_NAME}          \n \
             OSSIFY_AARTIST   = ${OSSIFY_AARTIST}            \n \
             OSSIFY_THEO_MODE = ${OSSIFY_THEO_MODE}          \n \
             OSSIFY_SONG_SECONDS = ${OSSIFY_SONG_SECONDS}    \n \
+            ############################################### \n \
             "
 
         # standard spiel, more info?
@@ -202,13 +191,13 @@ function ossify() {
         if [ $OSSIFY_SKIP_TIME == "r" ]
         then
             ossify_dp "OSSIFY: RANDOM TIME AUDIO PLAYBACK MODE"
-            OSSIFY_RAND_MAX=${OSSIFY_SONG_SECONDS_INT}-${OSSIFY_RAND_MIN_SONG_LENGTH}
+            OSSIFY_RAND_MAX=$(( ${OSSIFY_SONG_SECONDS_INT} - ${OSSIFY_RAND_MIN_SONG_LENGTH} ))
             OSSIFY_RAND_DIFF=`bc <<< "scale=2; ${OSSIFY_RAND_MAX}-${OSSIFY_RAND_MIN}+1"`
 
             OSSIFY_RANDOM_DIFF=$RANDOM%${OSSIFY_RAND_DIFF}
             OSSIFY_RAND_SKIP_TIME=`bc <<< "scale=2; ${OSSIFY_RAND_MIN}+$OSSIFY_RANDOM_DIFF-$OSSIFY_SKIP_COMP"`
             OSSIFY_SKIP_TIME=$(ossify_f2i ${OSSIFY_RAND_SKIP_TIME})
-            echo "OSSIFY: OSSIFY_RAND_SKIP_TIME $OSSIFY_SKIP_TIME"
+            echo "OSSIFY: OSSIFY_RAND_SKIP_TIME $OSSIFY_SKIP_TIME OSSIFY_RAND_MAX $OSSIFY_RAND_MAX  OSSIFY_RAND_DIFF $OSSIFY_RAND_DIFF OSSIFY_RAND_MIN $OSSIFY_RAND_MIN"
         fi
         ossify_dp "OSSIFY: OSSIFY_SKIP_TIME $OSSIFY_SKIP_TIME"
 
@@ -292,5 +281,33 @@ function ossify() {
     fi
 }
 
+function ossify_dp() {
+    if [ $OSSIFY_DEBUG ]
+    then
+      printf "\n${1}\n"
+    fi
+}
 
+function ossify_dp1() {
+    if [ $OSSIFY_DEBUG1 ]
+    then
+      printf "\n${1}\n"
+    fi
+}
+
+function ossify_dp3() {
+    if [ $OSSIFY_DEBUG3 ]
+    then
+      printf "\n${1}\n"
+    fi
+}
+
+function ossify_theo_said() {
+    echo "THEO_SAYS: ${1}"
+    say $1
+}
+
+function ossify_theo_sign_off() {
+    ossify_theo_said "Theo bidding off!"
+}
 
