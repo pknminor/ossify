@@ -99,7 +99,7 @@ function ossify_poll_seconds_played() {
     done
 }
 
-function ossify_pause_after_current_song_full() {
+function ossify_pause_at_next_start() {
     while [ 1 ]
     do
         local ossify_seconds_played_int=$(ossify_f2i "`spotify info |  sed -n 's/Seconds played:[[:space:]]*\(.*\)/\1/p'`")
@@ -108,11 +108,11 @@ function ossify_pause_after_current_song_full() {
         local ossify_song_info_seconds_int=$(ossify_f2i $ossify_song_info_seconds_post)
         local ossify_seconds_left=$(( $ossify_song_info_seconds_int - $ossify_seconds_played_int ))
         local ossify_seconds_left_thresh=4
-        ossify_dp "OSSIFY_PAUSE_AFTER_CURRENT_SONG_FULL: ossify_seconds_left $ossify_seconds_left ossify_song_info_seconds_int $ossify_song_info_seconds_int ossify_seconds_played_int $ossify_seconds_played_int  ossify_song_info_seconds $ossify_song_info_seconds\n"
+        ossify_dp "OSSIFY_PAUSE_AT_NEXT_START: ossify_seconds_left $ossify_seconds_left ossify_song_info_seconds_int $ossify_song_info_seconds_int ossify_seconds_played_int $ossify_seconds_played_int  ossify_song_info_seconds $ossify_song_info_seconds\n"
         if [ $ossify_seconds_left -lt 4 ]
         then
-            ossify_dp "OSSIFY_PAUSE_AFTER_CURRENT_SONG_FULL: ossify_seconds_left $ossify_seconds_left is less than the threshold ossify_seconds_left_thresh $ossify_seconds_left_thresh\n"
-            ossify_dp "OSSIFY_PAUSE_AFTER_CURRENT_SONG_FULL: going to next and pausing playback"
+            ossify_dp "OSSIFY_PAUSE_AT_NEXT_START: ossify_seconds_left $ossify_seconds_left is less than the threshold ossify_seconds_left_thresh $ossify_seconds_left_thresh\n"
+            ossify_dp "OSSIFY_PAUSE_AT_NEXT_START: going to next and pausing playback"
             spotify next
             spotify pause
         fi
@@ -142,6 +142,18 @@ function ossify_pause_after_skip_time() {
         fi
         sleep {0.01}s
     done
+}
+
+# make song stop playing, if its playing or currently paused, "spotify pause" acts like play/pause
+function ossify_pause() {
+    local ossigy_pause_sleep_seconds=1
+    local ossify_seconds_played_int_before=$(ossify_f2i "`spotify info |  sed -n 's/Seconds played:[[:space:]]*\(.*\)/\1/p'`")
+    sleep ${ossify_pause_sleep_seconds}s
+    local ossify_seconds_played_int_after=$(ossify_f2i "`spotify info |  sed -n 's/Seconds played:[[:space:]]*\(.*\)/\1/p'`")
+    if [ $ossify_seconds_played_int_before -ne $ossify_seconds_played_int_after ]
+    then
+        spotify pause
+    fi
 }
 
 # 
@@ -219,11 +231,11 @@ function ossify() {
         OSSIFY_SONG_SECONDS_INT=$(ossify_f2i ${OSSIFY_SONG_SECONDS})
 
         # dbg print
-        ossify_dp "                                      \
-            OSSIFY_SKIP_TIME = ${OSSIFY_SKIP_TIME}    \n \
-            OSSIFY_SONG_NAME = ${OSSIFY_SONG_NAME}    \n \
-            OSSIFY_AARTIST   = ${OSSIFY_AARTIST}      \n \
-            OSSIFY_THEO_MODE = ${OSSIFY_THEO_MODE}    \n \
+        ossify_dp "                                            \
+            OSSIFY_SKIP_TIME = ${OSSIFY_SKIP_TIME}          \n \
+            OSSIFY_SONG_NAME = ${OSSIFY_SONG_NAME}          \n \
+            OSSIFY_AARTIST   = ${OSSIFY_AARTIST}            \n \
+            OSSIFY_THEO_MODE = ${OSSIFY_THEO_MODE}          \n \
             OSSIFY_SONG_SECONDS = ${OSSIFY_SONG_SECONDS}    \n \
             "
 
@@ -231,7 +243,7 @@ function ossify() {
         OSSIFY_TRACK_INFO="${OSSIFY_SONG_NAME} by ${OSSIFY_AARTIST}"
         echo "FIRST ISSUE $OSSIFY_TRACK_INFO"
 
-        if [ $ossify_skip_time == "r" ]
+        if [ $OSSIFY_SKIP_TIME == "r" ]
         then
             ossify_dp "OSSIFY: RANDOM TIME AUDIO PLAYBACK MODE"
             OSSIFY_RAND_MAX=${OSSIFY_SONG_SECONDS_INT}
@@ -248,6 +260,8 @@ function ossify() {
         then
             ossify_dp "OSSIFY: CLASSIC MODE"
             ossify_theo_said "$OSSIFY_TRACK_INFO"
+            # make song stop playing
+            ossify_pause
             spotify pos 0
             spotify play
 
