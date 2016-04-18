@@ -168,7 +168,7 @@ function ossify() {
     echo "OSSIFY_OUT_LOC:       ${OSSIFY_OUT_LOC}"           >> ${OSSIFY_OUT_FILE}
     echo "--------------------------"                        >> ${OSSIFY_OUT_FILE}
 
-    if [ $OSSIFY_DEBUG ]
+    if [ $OSSIFY_DEBUG_POLL_SECONDS_PLAYED ]
     then
         # cont debug print
         ossify_poll_seconds_played &
