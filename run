@@ -7,6 +7,6 @@ source ossify.bash
 
 rm -rf ${1}_run.log
 
-source $1 | tee ${1}_run.log
+source $1 | tee out.log
 
 exit 0
