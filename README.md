@@ -26,7 +26,7 @@ Change songs after a certain or random amount of time, get artist and song infor
 >
 > >  Usage:
 >
-> >      ossify <playlist-name> <time-per-play> <number-of-plays> <theo-mode, aka your RJ> <quit-after> <log-location>
+> >      ossify <playlist-name> <time-per-play> <number-of-plays> <theo-mode, aka your RJ> <exit> <log-location>
 >
 > >      <playlist-name>   = Playlist name
 > >      <time-per-play>   = (0-180), seconds
@@ -37,7 +37,7 @@ Change songs after a certain or random amount of time, get artist and song infor
 > >                          2, Armin Mode, Theo speaks at the begining of the play
 > >                          3, FYI Mode, Theo speaks at the end of the play
 > >                          4, Off, Theo sleeps for a while
-> >      <quit-after>      = 0, Keep listening to the music..
+> >      <exit>            = 0, Pause after <number-of-plays>
 > >                          1, Quit after <number-of-plays>, Theo speaks at the end of all plays
 > >      <log-location>    = Play history file, default is HOME/ossify_logs
 >
