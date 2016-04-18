@@ -275,9 +275,6 @@ function ossify() {
         echo "--------------------------"    >> ${OSSIFY_OUT_FILE}
         echo "----END-OF-TRACK----------"    >> ${OSSIFY_OUT_FILE}
 
-
-        #OSSIFY_SONG_SECONDS_ADJ=`bc <<< "scale=2; $OSSIFY_SONG_SECS - $OSSIFY_SONG_COMP"`
-
     done
 
     echo "----END-------------------"    >> ${OSSIFY_OUT_FILE} # end of playbook
