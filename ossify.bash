@@ -281,8 +281,8 @@ function ossify() {
             else
                 ossify_pause_after_skip_time $OSSIFY_SKIP_TIME
             fi
-
-        elif [ $OSSIFY_THEO_MODE -eq 2 ]# overlapped beginning
+        # overlapped beginning
+        elif [ $OSSIFY_THEO_MODE -eq 2 ]
         then
             ossify_dp "OSSIFY: ARMIN MODE"
             ossify_pause_at_start
