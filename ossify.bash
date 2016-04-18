@@ -5,6 +5,10 @@ function ossify_f2i() {
     echo ${float%.*}
 }
 
+function ossify_poll_sleep() {
+    sleep 0.2s
+}
+
 function ossify_dp() {
     if [ $OSSIFY_DEBUG ]
     then
@@ -100,10 +104,6 @@ function ossify_pause() {
     fi
 }
 
-function ossify_poll_sleep() {
-    sleep 0.2s
-}
-
 function ossify_poll_seconds_played() {
     while [ 1 ]
     do
@@ -132,7 +132,8 @@ function ossify_pause_at_next_start() {
             ossify_dp "OSSIFY_PAUSE_AT_NEXT_START: ossify_seconds_left $ossify_seconds_left is less than the threshold ossify_seconds_left_thresh $ossify_seconds_left_thresh\n"
             ossify_dp "OSSIFY_PAUSE_AT_NEXT_START: going to next and pausing playback"
             spotify next
-            spotify pause
+            # spotify pause
+            ossify_pause
             break
         fi
         ossify_poll_sleep
@@ -157,7 +158,8 @@ function ossify_pause_after_skip_time() {
             ossify_dp "OSSIFY_PAUSE_AFTER_SKIP_TIME: ossify_seconds_left $ossify_seconds_left is less than the threshold ossify_seconds_left_thresh $ossify_seconds_left_thresh\n"
             ossify_dp "OSSIFY_PAUSE_AFTER_SKIP_TIME: going to next and pausing playback"
             spotify next
-            spotify pause
+            #spotify pause
+            ossify_pause
             break
         fi
         ossify_poll_sleep
@@ -226,6 +228,7 @@ function ossify() {
     echo "OSSIFY_OUT_LOC:       ${OSSIFY_OUT_LOC}"           >> ${OSSIFY_OUT_FILE}
     echo "--------------------------"                        >> ${OSSIFY_OUT_FILE}
 
+    spotify next
     for VAR in `seq 1 ${OSSIFY_NUM_SONGS}`
     do
         # cont debug print
@@ -267,7 +270,8 @@ function ossify() {
         if [ $OSSIFY_THEO_MODE -eq 1 ]
         then
             ossify_dp "OSSIFY: CLASSIC MODE"
-            ossify_pause_song_at_start
+            #
+            ossify_pause_at_start
             ossify_theo_said "$OSSIFY_TRACK_INFO"
             spotify play
 
@@ -344,8 +348,6 @@ function ossify() {
         spotify quit
     fi
 }
-
-
 
 
 
