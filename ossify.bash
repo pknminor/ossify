@@ -30,66 +30,6 @@ function ossify_sleep() {
     sleep "${1}s"
 }
 
-#function ossify_pause_at_next_start() {
-#    local ossigy_song_seconds_flt=$1
-#    local ossify_song_seconds_adj=$2
-#    local ossify_skip_time_adj=$3
-#    local ossify_skip_comp=$4
-#    local ossify_rand_skip_time=$5
-#    local ossify_skip_time=$6
-#    while [ 1 ]
-#    do
-#        local ossify_seconds_played=`spotify info |  sed -n 's/Seconds played:[[:space:]]*\(.*\)/\1/p'`
-#
-#        ossify_dp "OSSIFY_PAUSE_AT_NEXT_START: seconds played $ossify_seconds_played\n"
-#
-#        local ossify_seconds_played_int=$(ossify_f2i $ossify_seconds_played)
-#        local ossify_song_seconds_int=$(ossify_f2i ${ossigy_song_seconds_flt})
-#
-#        ossify_dp "OSSIFY_PAUSE_AT_NEXT_START: seconds played int $ossify_seconds_played_int\n"
-#
-#        local ossify_seconds_left_int=$(( $ossify_song_seconds_int - $ossify_seconds_played_int ))
-#
-#        ossify_dp "OSSIFY_PAUSE_AT_NEXT_START: seconds left $ossify_seconds_left_int\n"
-#
-#        # skip time calculation
-#
-#        if [ $ossify_skip_time == "f" ]
-#        then
-#            continue
-#        elif [ $ossify_seconds_left_int -lt 2 ]
-#        then
-#            ossify_dp "OSSIFY_PAUSE_AT_NEXT_START: seconds left less than 2"
-#            spotify pause
-#            ossify_dp "OSSIFY_PAUSE_AT_NEXT_START: after pause"
-#            # FIXME
-#            break
-#        elif [ $ossify_skip_time == "r" ]
-#        then
-#            ossify_dp "OSSIFY: RANDOM TIME AUDIO PLAYBACK MODE"
-#            ossify_rand_min=30
-#            ossify_rand_max=${ossify_song_seconds_adj}
-#            ossify_rand_diff=`bc <<< "scale=2; ${ossify_rand_max}-${ossify_rand_min}+1"`
-#
-#            RANDOM_DIFF=$RANDOM%${ossify_rand_diff}
-#            ossify_rand_skip_time=`bc <<< "scale=2; ${ossify_rand_min}+$random_diff-$ossify_skip_comp"`
-#
-#            ossify_sleep $ossify_rand_skip_time
-#            spotify pause
-#
-#        elif [ $ossify_skip_time != "f" ] # regular skip delay
-#        then
-#            ossify_dp "OSSIFY: CONSTANT TIME AUDIO PLAYBACK MODE"
-#
-#            # adjust
-#            ossify_skip_time_adj=`bc <<< "scale=2; $ossify_skip_time-$ossify_skip_comp"`
-#            ossify_sleep "$ossify_skip_time_adj"
-#            spotify pause
-#        fi
-#        sleep {0.01}s
-#    done
-# }
-
 # make song stop playing, if its playing or currently paused, "spotify pause" acts like play/pause
 function ossify_pause() {
     # CHECKME
@@ -153,7 +93,8 @@ function ossify_pause_after_skip_time() {
         local ossify_song_info_seconds_int=$(ossify_f2i $ossify_song_info_seconds_post)
         local ossify_seconds_left=$(( $ossify_song_skip_time - $ossify_seconds_played_int ))
         ossify_dp "OSSIFY_PAUSE_AFTER_SKIP_TIME: ossify_seconds_left $ossify_seconds_left ossify_song_info_seconds_int $ossify_song_info_seconds_int ossify_seconds_played_int $ossify_seconds_played_int  ossify_song_info_seconds $ossify_song_info_seconds\n"
-        if [ $ossify_seconds_left -lt 4 ]
+        #if [ $ossify_seconds_left -lt 4 ]
+        if [ $ossify_seconds_left -lt 1 ]
         then
             ossify_dp "OSSIFY_PAUSE_AFTER_SKIP_TIME: ossify_seconds_left $ossify_seconds_left is less than the threshold ossify_seconds_left_thresh $ossify_seconds_left_thresh\n"
             ossify_dp "OSSIFY_PAUSE_AFTER_SKIP_TIME: going to next and pausing playback"
@@ -181,8 +122,7 @@ function ossify() {
     OSSIFY_QUIT_AFTER=${5}
     OSSIFY_OUT_LOC=${6}
     OSSIFY_ARMIN_DELAY=6
-    OSSIFY_SKIP_COMP=1
-    OSSIFY_SONG_COMP=3
+    OSSIFY_SKIP_COMP=3
     OSSIFY_RAND_MIN=30
 
     if [ -z $OSSIFY_SKIP_TIME ] || [ -z $OSSIFY_PLAYLIST_NAME ] || [ -z $OSSIFY_NUM_SONGS ] || [ -z $OSSIFY_THEO_MODE ] || [ -z $OSSIFY_QUIT_AFTER ] || [ -z $OSSIFY_OUT_LOC ]
