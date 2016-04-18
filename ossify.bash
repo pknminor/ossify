@@ -202,7 +202,7 @@ function ossify() {
 
             OSSIFY_RANDOM_DIFF=$RANDOM%${OSSIFY_RAND_DIFF}
             OSSIFY_RAND_SKIP_TIME=`bc <<< "scale=2; ${OSSIFY_RAND_MIN}+$OSSIFY_RANDOM_DIFF-$OSSIFY_SKIP_COMP"`
-            OSSIFY_SKIP_TIME=$OSSIFY_RAND_SKIP_TIME
+            OSSIFY_SKIP_TIME=$(ossify_f2i ${OSSIFY_RAND_SKIP_TIME})
         fi
         ossify_dp "OSSIFY: OSSIFY_SKIP_TIME $OSSIFY_SKIP_TIME"
 
@@ -285,6 +285,5 @@ function ossify() {
         spotify quit
     fi
 }
-
 
 
