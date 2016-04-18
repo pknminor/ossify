@@ -64,8 +64,6 @@ function ossify_pause_at_next_start() {
 }
 
 # pause after skip time, variation of pause_after_full_song
-# TODO
-# minimize sub-shell calls
 function ossify_pause_after_skip_time() {
     while [ 1 ]
     do
@@ -128,6 +126,7 @@ function ossify() {
         OSSIFY_QUIT_AFTER:    ${OSSIFY_QUIT_AFTER}    \n \
         OSSIFY_OUT_LOC:       ${OSSIFY_OUT_LOC}       \n \
         "
+
     # output log
     OSSIFY_TIMESTAMP=`date +"%m-%d-%y-%T"`
     OSSIFY_OUT_FILE="${OSSIFY_OUT_LOC}/${OSSIFY_PLAYLIST_NAME}_${OSSIFY_TIMESTAMP}.txt"
@@ -143,7 +142,6 @@ function ossify() {
             echo "Error: Unable to create ${OSSIFY_OUT_FILE}! Exiting.."
         fi
     fi
-
     echo "---OSSIFY PLAY HISTORY----"                        >> ${OSSIFY_OUT_FILE} # the playbook begins...
     echo "OSSIFY_PLAYLIST_NAME: ${OSSIFY_PLAYLIST_NAME}"     >> ${OSSIFY_OUT_FILE}
     echo "OSSIFY_SKIP_TIME:     ${OSSIFY_SKIP_TIME}"         >> ${OSSIFY_OUT_FILE}
@@ -159,8 +157,22 @@ function ossify() {
         ossify_poll_seconds_played &
     fi
 
-    # INTRO MESSAGE?
     spotify next
+
+    # intro message
+    if [ ${OSSIFY_THEO_MODE} -eq 1 ]
+    then
+        ossify_theo_said "Ossify, Classic Mode"
+    elif [ ${OSSIFY_THEO_MODE} -eq 2 ]
+    then
+        ossify_theo_said "Ossify, Armin mode"
+    elif [ ${OSSIFY_THEO_MODE} -eq 2 ]
+    then
+        ossify_theo_said "Ossify, FYI mode"
+    else
+        ossify_theo_said "Ossify, Quiet mode"
+    fi
+
     for VAR in `seq 1 ${OSSIFY_NUM_SONGS}`
     do
 
@@ -276,9 +288,10 @@ function ossify() {
 
     echo "----END-------------------"    >> ${OSSIFY_OUT_FILE} # end of playbook
 
+    #ossify_theo_said "Theo bidding off!"
     if [ $OSSIFY_QUIT_AFTER -eq 1 ]
     then
-        ossify_theo_sign_off
+        ossify_theo_said "Theo bidding off!"
         spotify quit
     fi
 }
@@ -301,9 +314,5 @@ function ossify_dp1() {
 function ossify_theo_said() {
     echo "THEO_SAYS: ${1}"
     say $1
-}
-
-function ossify_theo_sign_off() {
-    ossify_theo_said "Theo bidding off!"
 }
 
