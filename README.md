@@ -27,14 +27,6 @@ Change songs after a certain or random amount of time, get artist and song infor
 > > 
 > >  ~: ossify ramones 45 30 3 0 ~/ossify_logs
 > > 
-> >  Thirty songs, random length of play, Classic RJ mode
-> > 
-> >  ~: ossify ramones r 30 1 0 ~/ossify_logs
-> > 
-> >  Thirty songs, full length, Armin RJ mode
-> > 
-> >  ~: ossify ramones f 30 3 0 ~/ossify_logs
->
 > >  Usage:
 >
 > >      ossify <playlist-name> <time-per-play> <number-of-plays> <theo-mode, aka your RJ> <exit> <log-location>
