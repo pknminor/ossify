@@ -22,7 +22,15 @@ Change songs after a certain or random amount of time, get artist and song infor
 >  2. Launch ossify from the terminal.
 >
 > >  For example,
-> >  ossify ramones 45 30 3 0 ~/ossify_logs
+> > 
+> >  Thirty songs, forty five seconds each, FYI RJ mode
+> >  ~: ossify ramones 45 30 3 0 ~/ossify_logs
+> > 
+> >  Thirty songs, random length of play, Classic RJ mode
+> >  ~: ossify ramones r 30 1 0 ~/ossify_logs
+> > 
+> >  Thirty songs, full length, Armin RJ mode
+> >  ~: ossify ramones f 30 3 0 ~/ossify_logs
 >
 > >  Usage:
 >
@@ -32,7 +40,7 @@ Change songs after a certain or random amount of time, get artist and song infor
 > >      <time-per-play>   = (0-180), seconds
 > >                          f, full song
 > >                          r, random switch
-> >      <number-of-plays> = >0
+> >      <number-of-songs> = >0
 > >      <theo-mode>       = 1, Classic Mode, Theo speaks before the play
 > >                          2, Armin Mode, Theo speaks at the begining of the play
 > >                          3, FYI Mode, Theo speaks at the end of the play
