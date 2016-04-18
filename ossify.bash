@@ -86,6 +86,18 @@ function ossify_sleep() {
 #    done
 # }
 
+# make song stop playing, if its playing or currently paused, "spotify pause" acts like play/pause
+function ossify_pause() {
+    local ossigy_pause_sleep_seconds=1
+    local ossify_seconds_played_int_before=$(ossify_f2i "`spotify info |  sed -n 's/Seconds played:[[:space:]]*\(.*\)/\1/p'`")
+    sleep ${ossify_pause_sleep_seconds}s
+    local ossify_seconds_played_int_after=$(ossify_f2i "`spotify info |  sed -n 's/Seconds played:[[:space:]]*\(.*\)/\1/p'`")
+    if [ $ossify_seconds_played_int_before -ne $ossify_seconds_played_int_after ]
+    then
+        spotify pause
+    fi
+}
+
 function ossify_poll_seconds_played() {
     while [ 1 ]
     do
@@ -114,7 +126,8 @@ function ossify_pause_at_next_start() {
             ossify_dp "OSSIFY_PAUSE_AT_NEXT_START: ossify_seconds_left $ossify_seconds_left is less than the threshold ossify_seconds_left_thresh $ossify_seconds_left_thresh\n"
             ossify_dp "OSSIFY_PAUSE_AT_NEXT_START: going to next and pausing playback"
             spotify next
-            spotify pause
+            ossify_pause
+            break
         fi
         sleep {0.01}s
     done
@@ -138,28 +151,18 @@ function ossify_pause_after_skip_time() {
             ossify_dp "OSSIFY_PAUSE_AFTER_SKIP_TIME: ossify_seconds_left $ossify_seconds_left is less than the threshold ossify_seconds_left_thresh $ossify_seconds_left_thresh\n"
             ossify_dp "OSSIFY_PAUSE_AFTER_SKIP_TIME: going to next and pausing playback"
             spotify next
-            spotify pause
+            ossify_pause
+            break
         fi
         sleep {0.01}s
     done
 }
 
-# make song stop playing, if its playing or currently paused, "spotify pause" acts like play/pause
-function ossify_pause() {
-    local ossigy_pause_sleep_seconds=1
-    local ossify_seconds_played_int_before=$(ossify_f2i "`spotify info |  sed -n 's/Seconds played:[[:space:]]*\(.*\)/\1/p'`")
-    sleep ${ossify_pause_sleep_seconds}s
-    local ossify_seconds_played_int_after=$(ossify_f2i "`spotify info |  sed -n 's/Seconds played:[[:space:]]*\(.*\)/\1/p'`")
-    if [ $ossify_seconds_played_int_before -ne $ossify_seconds_played_int_after ]
-    then
-        spotify pause
-    fi
-}
 
 # 
 function ossify_pause_at_curr_song_start() {
     spotify pos 0
-    spotify pause
+    ossify_pause
 }
 
 function ossify() {
@@ -259,23 +262,23 @@ function ossify() {
         if [ $OSSIFY_THEO_MODE -eq 1 ]
         then
             ossify_dp "OSSIFY: CLASSIC MODE"
-            ossify_theo_said "$OSSIFY_TRACK_INFO"
-            # make song stop playing
-            ossify_pause
             spotify pos 0
+            ossify_pause
+            ossify_theo_said "$OSSIFY_TRACK_INFO"
             spotify play
 
             if [ $OSSIFY_SKIP_TIME == "f" ]
             then
-                ossify_pause_at_next_start &
+                ossify_pause_at_next_start
             else
-                ossify_pause_after_skip_time $OSSIFY_SKIP_TIME &
+                ossify_pause_after_skip_time $OSSIFY_SKIP_TIME
             fi
 
         elif [ $OSSIFY_THEO_MODE -eq 2 ]# overlapped beginning
         then
             ossify_dp "OSSIFY: ARMIN MODE"
             spotify pos 0
+            ossify_pause
             spotify play
 
             ossify_sleep "$OSSIFY_ARMIN_DELAY"
@@ -283,21 +286,22 @@ function ossify() {
 
             if [ $OSSIFY_SKIP_TIME == "f" ]
             then
-                ossify_pause_at_next_start &
+                ossify_pause_at_next_start
             else
-                ossify_pause_after_skip_time $OSSIFY_SKIP_TIME &
+                ossify_pause_after_skip_time $OSSIFY_SKIP_TIME
             fi
         elif [ $OSSIFY_THEO_MODE -eq 3 ]
         then
             ossify_dp "OSSIFY: FYI MODE"
             spotify pos 0
+            ossify_pause
             spotify play
 
             if [ $OSSIFY_SKIP_TIME == "f" ]
             then
-                ossify_pause_at_next_start &
+                ossify_pause_at_next_start
             else
-                ossify_pause_after_skip_time $OSSIFY_SKIP_TIME &
+                ossify_pause_after_skip_time $OSSIFY_SKIP_TIME
             fi
 
             ossify_theo_said "$OSSIFY_TRACK_INFO"
@@ -310,9 +314,9 @@ function ossify() {
 
             if [ $OSSIFY_SKIP_TIME == "f" ]
             then
-                ossify_pause_at_next_start &
+                ossify_pause_at_next_start
             else
-                ossify_pause_after_skip_time $OSSIFY_SKIP_TIME &
+                ossify_pause_after_skip_time $OSSIFY_SKIP_TIME
             fi
         fi
 
@@ -325,7 +329,8 @@ function ossify() {
         echo "--------------------------"    >> ${OSSIFY_OUT_FILE}
         echo "----END-OF-TRACK----------"    >> ${OSSIFY_OUT_FILE}
 
-        OSSIFY_SONG_SECONDS_ADJ=`bc <<< "scale=2; $OSSIFY_SONG_SECS - $OSSIFY_SONG_COMP"`
+
+        #OSSIFY_SONG_SECONDS_ADJ=`bc <<< "scale=2; $OSSIFY_SONG_SECS - $OSSIFY_SONG_COMP"`
 
     done
 
