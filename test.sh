@@ -13,9 +13,6 @@ function sac {
     echo ${1}
 }
 
-# test exit after play
-sac "TEST1"
-
 ossify test1 r 5 1 0 ${HOME}/ossify_logs_test
 
 

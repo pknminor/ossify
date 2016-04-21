@@ -41,8 +41,8 @@ function ossify_pause_at_next_start() {
         then
             ossify_dp "OSSIFY_PAUSE_AT_NEXT_START: ossify_seconds_left $ossify_seconds_left is less than the threshold ossify_seconds_left_thresh $ossify_seconds_left_thresh\n"
             ossify_dp "OSSIFY_PAUSE_AT_NEXT_START: going to next and pausing playback"
-            spotify next
-            spotify pause
+            spotify next > /dev/null
+            spotify pause > /dev/null
             break
         fi
         ossify_poll_sleep
@@ -65,8 +65,8 @@ function ossify_pause_after_skip_time() {
         then
             ossify_dp "OSSIFY_PAUSE_AFTER_SKIP_TIME: ossify_seconds_left $ossify_seconds_left is less than the threshold ossify_seconds_left_thresh $ossify_seconds_left_thresh\n"
             ossify_dp "OSSIFY_PAUSE_AFTER_SKIP_TIME: going to next and pausing playback"
-            spotify next
-            spotify pause
+            spotify next > /dev/null
+            spotify pause > /dev/null
             break
         fi
         ossify_poll_sleep
@@ -84,8 +84,7 @@ function ossify() {
     OSSIFY_OUT_LOC=${6}
     OSSIFY_ARMIN_DELAY=6
     OSSIFY_SKIP_COMP=3
-    OSSIFY_RAND_MIN=30
-    OSSIFY_RAND_MIN_SONG_LENGTH=30
+    OSSIFY_MIN_PLAY_LENGTH=30
 
     if [ -z $OSSIFY_SKIP_TIME ] || [ -z $OSSIFY_PLAYLIST_NAME ] || [ -z $OSSIFY_NUM_SONGS ] || [ -z $OSSIFY_THEO_MODE ] || [ -z $OSSIFY_QUIT_AFTER ] || [ -z $OSSIFY_OUT_LOC ]
     then
@@ -137,8 +136,8 @@ function ossify() {
     fi
 
     # start at next song
-    spotify next
-    spotify pause
+    spotify next > /dev/null
+    spotify pause > /dev/null
 
     # intro message
     if [ ${OSSIFY_THEO_MODE} -eq 1 ]
@@ -179,14 +178,21 @@ function ossify() {
 
         # standard spiel, more info?
         OSSIFY_TRACK_INFO="${OSSIFY_SONG_NAME} by ${OSSIFY_AARTIST}"
-        echo "FIRST ISSUE $OSSIFY_TRACK_INFO"
 
         if [ $OSSIFY_SKIP_TIME == "r" ]
         then
-            ossify_dp "OSSIFY: RANDOM TIME AUDIO PLAYBACK MODE"
-            OSSIFY_RAND_MAX=$(( ${OSSIFY_SONG_SECONDS_INT} - ${OSSIFY_RAND_MIN_SONG_LENGTH} ))
-            OSSIFY_RAND_DIFF=`bc <<< "scale=2; ${OSSIFY_RAND_MAX}-${OSSIFY_RAND_MIN}+1"`
+            ossify_dp1 "OSSIFY: RANDOM TIME AUDIO PLAYBACK MODE"
 
+            if [ $OSSIFY_SONG_SECONS_INT -lt $OSSIFY_RAND_MIN ]
+            then
+              OSSIFY_RAND_MAX=$OSSIFY_SONG_SECONDS_INT
+              OSSIFY_RAND_MIN=$OSSIFY_SONG_SECONDS_INT
+            else
+              OSSIFY_RAND_MAX=$(( ${OSSIFY_SONG_SECONDS_INT} - ${OSSIFY_MIN_PLAY_LENGTH} ))
+              OSSIFY_RAND_MIN=30
+            fi
+
+            OSSIFY_RAND_DIFF=`bc <<< "scale=2; ${OSSIFY_RAND_MAX}-${OSSIFY_RAND_MIN}+1"`
             OSSIFY_RANDOM_DIFF=$RANDOM%${OSSIFY_RAND_DIFF}
             OSSIFY_RAND_SKIP_TIME=`bc <<< "scale=2; ${OSSIFY_RAND_MIN}+$OSSIFY_RANDOM_DIFF-$OSSIFY_SKIP_COMP"`
             OSSIFY_SKIP_TIME=$(ossify_f2i ${OSSIFY_RAND_SKIP_TIME})
@@ -200,7 +206,7 @@ function ossify() {
             ossify_dp "OSSIFY: CLASSIC MODE"
             #
             ossify_theo_said "$OSSIFY_TRACK_INFO"
-            spotify play
+            spotify play > /dev/null
 
             if [ $OSSIFY_SKIP_TIME == "f" ]
             then
@@ -213,7 +219,7 @@ function ossify() {
         elif [ $OSSIFY_THEO_MODE -eq 2 ]
         then
             ossify_dp "OSSIFY: ARMIN MODE"
-            spotify play
+            spotify play > /dev/null
 
             ossify_sleep "$OSSIFY_ARMIN_DELAY"
             ossify_theo_said "$OSSIFY_TRACK_INFO"
@@ -228,7 +234,7 @@ function ossify() {
         elif [ $OSSIFY_THEO_MODE -eq 3 ]
         then
             ossify_dp "OSSIFY: FYI MODE"
-            spotify play
+            spotify play > /dev/null
 
             if [ $OSSIFY_SKIP_TIME == "f" ]
             then
@@ -242,7 +248,7 @@ function ossify() {
         elif [ $OSSIFY_THEO_MODE -eq 4 ]
         then
             ossify_dp "OSSIFY: THEO OFF MODE"
-            spotify play
+            spotify play > /dev/null
 
             if [ $OSSIFY_SKIP_TIME == "f" ]
             then
@@ -289,7 +295,7 @@ function ossify_dp1() {
 
 
 function ossify_theo_said() {
-    echo "THEO_SAYS: ${1}"
+    ossify_dp "THEO_SAYS: ${1}"
     say $1
 }
 
