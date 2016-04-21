@@ -172,19 +172,6 @@ function ossify() {
         echo "--------------------------"                                             >> ${OSSIFY_OUT_FILE}
         echo "----END-OF-TRACK----------"                                             >> ${OSSIFY_OUT_FILE}
 
-        # dbg print
-        ossify_dp1 "                                           \
-            ############################################### \n \
-            SONG ${VAR}/${OSSIFY_NUM_SONGS}                 \n \
-            ############################################### \n \
-            OSSIFY_SKIP_TIME    = ${OSSIFY_SKIP_TIME}       \n \
-            OSSIFY_SONG_NAME    = ${OSSIFY_SONG_NAME}       \n \
-            OSSIFY_AARTIST      = ${OSSIFY_AARTIST}         \n \
-            OSSIFY_THEO_MODE    = ${OSSIFY_THEO_MODE}       \n \
-            OSSIFY_SONG_SECONDS = ${OSSIFY_SONG_SECONDS}    \n \
-            ############################################### \n \
-            "
-
         OSSIFY_TRACK_INFO_SIMPLE="${OSSIFY_SONG_NAME} by ${OSSIFY_AARTIST}"
         echo "SONG ${VAR}/${OSSIFY_NUM_SONGS}"
         echo "${OSSIFY_TRACK_INFO_SIMPLE}"
@@ -267,6 +254,19 @@ function ossify() {
                 ossify_pause_after_skip_time $OSSIFY_SKIP_TIME
             fi
         fi
+
+        # dbg print
+        ossify_dp1 "                                           \
+            ############################################### \n \
+            SONG ${VAR}/${OSSIFY_NUM_SONGS}                 \n \
+            ############################################### \n \
+            OSSIFY_SKIP_TIME    = ${OSSIFY_SKIP_TIME}       \n \
+            OSSIFY_SONG_NAME    = ${OSSIFY_SONG_NAME}       \n \
+            OSSIFY_AARTIST      = ${OSSIFY_AARTIST}         \n \
+            OSSIFY_THEO_MODE    = ${OSSIFY_THEO_MODE}       \n \
+            OSSIFY_SONG_SECONDS = ${OSSIFY_SONG_SECONDS}    \n \
+            ############################################### \n \
+            "
 
     done
 
