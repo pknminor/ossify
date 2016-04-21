@@ -163,10 +163,19 @@ function ossify() {
         OSSIFY_SONG_SECONDS=`bc <<< "scale=2; ${OSSIFY_SONG_INFO_SECONDS}/1000"`
         OSSIFY_SONG_SECONDS_INT=$(ossify_f2i ${OSSIFY_SONG_SECONDS})
 
+        # keep track of what you listened to
+        echo "PLAY #${VAR}"                                                           >> ${OSSIFY_OUT_FILE}
+        echo "--------------------------"                                             >> ${OSSIFY_OUT_FILE}
+        spotify share                                                                 >> ${OSSIFY_OUT_FILE}
+        echo "--------------------------"                                             >> ${OSSIFY_OUT_FILE}
+        spotify info | tr -dc "[:alnum:][:space:][:punct:]" | grep -v "\[1m\[32m"     >> ${OSSIFY_OUT_FILE}
+        echo "--------------------------"                                             >> ${OSSIFY_OUT_FILE}
+        echo "----END-OF-TRACK----------"                                             >> ${OSSIFY_OUT_FILE}
+
         # dbg print
         ossify_dp1 "                                           \
             ############################################### \n \
-            SONG#${VAR}                                     \n \
+            SONG ${VAR}/${OSSIFY_NUM_SONGS}                 \n \
             ############################################### \n \
             OSSIFY_SKIP_TIME = ${OSSIFY_SKIP_TIME}          \n \
             OSSIFY_SONG_NAME = ${OSSIFY_SONG_NAME}          \n \
@@ -176,8 +185,9 @@ function ossify() {
             ############################################### \n \
             "
 
-        # standard spiel, more info?
-        OSSIFY_TRACK_INFO="${OSSIFY_SONG_NAME} by ${OSSIFY_AARTIST}"
+        OSSIFY_TRACK_INFO_SIMPLE="${OSSIFY_SONG_NAME} by ${OSSIFY_AARTIST}"
+        echo "SONG ${VAR}/${OSSIFY_NUM_SONGS}"
+        echo "${OSSIFY_TRACK_INFO_SIMPLE}"
 
         if [ $OSSIFY_SKIP_TIME == "r" ]
         then
@@ -205,7 +215,7 @@ function ossify() {
         then
             ossify_dp "OSSIFY: CLASSIC MODE"
             #
-            ossify_theo_said "$OSSIFY_TRACK_INFO"
+            ossify_theo_said "$OSSIFY_TRACK_INFO_SIMPLE"
             spotify play > /dev/null
 
             if [ $OSSIFY_SKIP_TIME == "f" ]
@@ -222,7 +232,7 @@ function ossify() {
             spotify play > /dev/null
 
             ossify_sleep "$OSSIFY_ARMIN_DELAY"
-            ossify_theo_said "$OSSIFY_TRACK_INFO"
+            ossify_theo_said "$OSSIFY_TRACK_INFO_SIMPLE"
 
             if [ $OSSIFY_SKIP_TIME == "f" ]
             then
@@ -243,7 +253,7 @@ function ossify() {
                 ossify_pause_after_skip_time $OSSIFY_SKIP_TIME
             fi
 
-            ossify_theo_said "For your information that was, $OSSIFY_TRACK_INFO"
+            ossify_theo_said "For your information that was, $OSSIFY_TRACK_INFO_SIMPLE"
 
         elif [ $OSSIFY_THEO_MODE -eq 4 ]
         then
@@ -257,15 +267,6 @@ function ossify() {
                 ossify_pause_after_skip_time $OSSIFY_SKIP_TIME
             fi
         fi
-
-        # keep track of what you listened to
-        echo "PLAY #${VAR}"                  >> ${OSSIFY_OUT_FILE}
-        echo "--------------------------"    >> ${OSSIFY_OUT_FILE}
-        spotify share                        >> ${OSSIFY_OUT_FILE}
-        echo "--------------------------"    >> ${OSSIFY_OUT_FILE}
-        spotify info                         >> ${OSSIFY_OUT_FILE}
-        echo "--------------------------"    >> ${OSSIFY_OUT_FILE}
-        echo "----END-OF-TRACK----------"    >> ${OSSIFY_OUT_FILE}
 
     done
 
@@ -292,7 +293,6 @@ function ossify_dp1() {
       printf "\n${1}\n"
     fi
 }
-
 
 function ossify_theo_said() {
     ossify_dp "THEO_SAYS: ${1}"
