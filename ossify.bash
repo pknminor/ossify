@@ -14,19 +14,6 @@ function ossify_sleep() {
     sleep "${1}s"
 }
 
-# definite pause, not used for now
-function ossify_pause() {
-    # CHECKME
-    local ossify_seconds_played_int_before=$(ossify_f2i "`spotify info |  sed -n 's/Seconds played:[[:space:]]*\(.*\)/\1/p'`")
-    sleep 0.2s
-    local ossify_seconds_played_int_after=$(ossify_f2i "`spotify info |  sed -n 's/Seconds played:[[:space:]]*\(.*\)/\1/p'`")
-    ossify_dp "ossify_seconds_played_int_before $ossify_seconds_played_int_before ossify_seconds_played_int_after $ossify_seconds_played_int_after"
-    if [ $ossify_seconds_played_int_before -ne $ossify_seconds_played_int_after ]
-    then
-        spotify pause
-    fi
-}
-
 function ossify_poll_seconds_played() {
     while [ 1 ]
     do
@@ -56,7 +43,6 @@ function ossify_pause_at_next_start() {
             ossify_dp "OSSIFY_PAUSE_AT_NEXT_START: going to next and pausing playback"
             spotify next
             spotify pause
-            #ossify_pause
             break
         fi
         ossify_poll_sleep
@@ -166,7 +152,7 @@ function ossify() {
     elif [ ${OSSIFY_THEO_MODE} -eq 2 ]
     then
         ossify_theo_said "Ossify, Armin mode"
-    elif [ ${OSSIFY_THEO_MODE} -eq 2 ]
+    elif [ ${OSSIFY_THEO_MODE} -eq 3 ]
     then
         ossify_theo_said "Ossify, FYI mode"
     else
