@@ -61,7 +61,7 @@ function ossify_pause_after_skip_time() {
         local ossify_seconds_left=$(( $ossify_song_skip_time - $ossify_seconds_played_int ))
         local ossify_seconds_left_thresh=1
         ossify_dp "OSSIFY_PAUSE_AFTER_SKIP_TIME: ossify_seconds_left $ossify_seconds_left ossify_song_info_seconds_int $ossify_song_info_seconds_int ossify_seconds_played_int $ossify_seconds_played_int  ossify_song_info_seconds $ossify_song_info_seconds\n"
-        if [ $ossify_seconds_left -lt $ossify_seconds_left_thresh ]
+        if [ $ossify_seconds_left -lt $ossify_seconds_left_thresh ] || [ $ossify_seconds_played_int -gt $ossify_song_skip_time ]
         then
             ossify_dp "OSSIFY_PAUSE_AFTER_SKIP_TIME: ossify_seconds_left $ossify_seconds_left is less than the threshold ossify_seconds_left_thresh $ossify_seconds_left_thresh\n"
             ossify_dp "OSSIFY_PAUSE_AFTER_SKIP_TIME: going to next and pausing playback"
