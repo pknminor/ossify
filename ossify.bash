@@ -178,10 +178,10 @@ function ossify() {
             ############################################### \n \
             SONG ${VAR}/${OSSIFY_NUM_SONGS}                 \n \
             ############################################### \n \
-            OSSIFY_SKIP_TIME = ${OSSIFY_SKIP_TIME}          \n \
-            OSSIFY_SONG_NAME = ${OSSIFY_SONG_NAME}          \n \
-            OSSIFY_AARTIST   = ${OSSIFY_AARTIST}            \n \
-            OSSIFY_THEO_MODE = ${OSSIFY_THEO_MODE}          \n \
+            OSSIFY_SKIP_TIME    = ${OSSIFY_SKIP_TIME}       \n \
+            OSSIFY_SONG_NAME    = ${OSSIFY_SONG_NAME}       \n \
+            OSSIFY_AARTIST      = ${OSSIFY_AARTIST}         \n \
+            OSSIFY_THEO_MODE    = ${OSSIFY_THEO_MODE}       \n \
             OSSIFY_SONG_SECONDS = ${OSSIFY_SONG_SECONDS}    \n \
             ############################################### \n \
             "
@@ -194,7 +194,7 @@ function ossify() {
         then
             ossify_dp1 "OSSIFY: RANDOM TIME AUDIO PLAYBACK MODE"
 
-            if [ $OSSIFY_SONG_SECONS_INT -lt $OSSIFY_RAND_MIN ]
+            if [ $OSSIFY_SONG_SECONDS_INT -lt $OSSIFY_RAND_MIN ]
             then
               OSSIFY_RAND_MAX=$OSSIFY_SONG_SECONDS_INT
               OSSIFY_RAND_MIN=$OSSIFY_SONG_SECONDS_INT
