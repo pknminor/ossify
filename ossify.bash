@@ -78,6 +78,7 @@ function ossify() {
     # args
     OSSIFY_PLAYLIST_NAME="${1}"
     OSSIFY_SKIP_TIME="${2}"
+    OSSIFY_SKIP_TIME_ARGS="${2}"
     OSSIFY_NUM_SONGS=${3}
     OSSIFY_THEO_MODE=${4}
     OSSIFY_QUIT_AFTER=${5}
@@ -189,7 +190,7 @@ function ossify() {
         echo "SONG ${VAR}/${OSSIFY_NUM_SONGS}"
         echo "${OSSIFY_TRACK_INFO_SIMPLE}"
 
-        if [ $OSSIFY_SKIP_TIME == "r" ]
+        if [ $OSSIFY_SKIP_TIME_ARGS == "r" ]
         then
             ossify_dp1 "OSSIFY: RANDOM TIME AUDIO PLAYBACK MODE"
 
