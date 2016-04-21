@@ -84,7 +84,6 @@ function ossify() {
     OSSIFY_QUIT_AFTER=${5}
     OSSIFY_OUT_LOC=${6}
     OSSIFY_ARMIN_DELAY=6
-    OSSIFY_SKIP_COMP=3
     OSSIFY_MIN_PLAY_LENGTH=30
 
     if [ -z $OSSIFY_SKIP_TIME ] || [ -z $OSSIFY_PLAYLIST_NAME ] || [ -z $OSSIFY_NUM_SONGS ] || [ -z $OSSIFY_THEO_MODE ] || [ -z $OSSIFY_QUIT_AFTER ] || [ -z $OSSIFY_OUT_LOC ]
@@ -204,10 +203,10 @@ function ossify() {
             fi
 
             OSSIFY_RAND_DIFF=`bc <<< "scale=2; ${OSSIFY_RAND_MAX}-${OSSIFY_RAND_MIN}+1"`
-            OSSIFY_RANDOM_DIFF=$RANDOM%${OSSIFY_RAND_DIFF}
-            OSSIFY_RAND_SKIP_TIME=`bc <<< "scale=2; ${OSSIFY_RAND_MIN}+$OSSIFY_RANDOM_DIFF-$OSSIFY_SKIP_COMP"`
+            OSSIFY_RANDOM_DIFF=$(($RANDOM%${OSSIFY_RAND_DIFF}))
+            OSSIFY_RAND_SKIP_TIME=`bc <<< "scale=2; ${OSSIFY_RAND_MIN}+$OSSIFY_RANDOM_DIFF"`
             OSSIFY_SKIP_TIME=$(ossify_f2i ${OSSIFY_RAND_SKIP_TIME})
-            ossify_dp1 "OSSIFY: OSSIFY_RAND_SKIP_TIME $OSSIFY_SKIP_TIME OSSIFY_RAND_MAX $OSSIFY_RAND_MAX  OSSIFY_RAND_DIFF $OSSIFY_RAND_DIFF OSSIFY_RAND_MIN $OSSIFY_RAND_MIN"
+            ossify_dp1 "OSSIFY: OSSIFY_SKIP_TIME $OSSIFY_SKIP_TIME OSSIFY_RAND_SKIP_TIME $OSSIFY_RAND_SKIP_TIME"
         fi
         ossify_dp "OSSIFY: OSSIFY_SKIP_TIME $OSSIFY_SKIP_TIME"
 
@@ -219,7 +218,7 @@ function ossify() {
             ossify_theo_said "$OSSIFY_TRACK_INFO_SIMPLE"
             spotify play > /dev/null
 
-            if [ $OSSIFY_SKIP_TIME == "f" ]
+            if [ $OSSIFY_SKIP_TIME_ARGS == "f" ]
             then
                 ossify_pause_at_next_start
             else
@@ -235,7 +234,7 @@ function ossify() {
             ossify_sleep "$OSSIFY_ARMIN_DELAY"
             ossify_theo_said "$OSSIFY_TRACK_INFO_SIMPLE"
 
-            if [ $OSSIFY_SKIP_TIME == "f" ]
+            if [ $OSSIFY_SKIP_TIME_ARGS == "f" ]
             then
                 ossify_pause_at_next_start
             else
@@ -247,7 +246,7 @@ function ossify() {
             ossify_dp "OSSIFY: FYI MODE"
             spotify play > /dev/null
 
-            if [ $OSSIFY_SKIP_TIME == "f" ]
+            if [ $OSSIFY_SKIP_TIME_ARGS == "f" ]
             then
                 ossify_pause_at_next_start
             else
@@ -261,7 +260,7 @@ function ossify() {
             ossify_dp "OSSIFY: THEO OFF MODE"
             spotify play > /dev/null
 
-            if [ $OSSIFY_SKIP_TIME == "f" ]
+            if [ $OSSIFY_SKIP_TIME_ARGS == "f" ]
             then
                 ossify_pause_at_next_start
             else
