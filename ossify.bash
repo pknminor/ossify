@@ -166,7 +166,7 @@ function ossify() {
         # keep track of what you listened to
         echo "PLAY #${VAR}"                                                           >> ${OSSIFY_OUT_FILE}
         echo "--------------------------"                                             >> ${OSSIFY_OUT_FILE}
-        spotify share                                                                 >> ${OSSIFY_OUT_FILE}
+        spotify share | tr -dc "[:alnum:][:space:][:punct:]" | grep -v "\[1m\[32m"    >> ${OSSIFY_OUT_FILE}
         echo "--------------------------"                                             >> ${OSSIFY_OUT_FILE}
         spotify info | tr -dc "[:alnum:][:space:][:punct:]" | grep -v "\[1m\[32m"     >> ${OSSIFY_OUT_FILE}
         echo "--------------------------"                                             >> ${OSSIFY_OUT_FILE}
