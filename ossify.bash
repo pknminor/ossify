@@ -194,13 +194,13 @@ function ossify() {
         then
             ossify_dp1 "OSSIFY: RANDOM TIME AUDIO PLAYBACK MODE"
 
+            OSSIFY_RAND_MIN=30
             if [ $OSSIFY_SONG_SECONDS_INT -lt $OSSIFY_RAND_MIN ]
             then
               OSSIFY_RAND_MAX=$OSSIFY_SONG_SECONDS_INT
               OSSIFY_RAND_MIN=$OSSIFY_SONG_SECONDS_INT
             else
               OSSIFY_RAND_MAX=$(( ${OSSIFY_SONG_SECONDS_INT} - ${OSSIFY_MIN_PLAY_LENGTH} ))
-              OSSIFY_RAND_MIN=30
             fi
 
             OSSIFY_RAND_DIFF=`bc <<< "scale=2; ${OSSIFY_RAND_MAX}-${OSSIFY_RAND_MIN}+1"`
