@@ -13,7 +13,7 @@ function sac {
     echo ${1}
 }
 
-ossify test1 r 5 1 0 ${HOME}/ossify_logs_test
+ossify test1 r 5 1 0 ${HOME}/ossify_logs_test 0
 
 
 exit 0

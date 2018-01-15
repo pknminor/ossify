@@ -15,26 +15,26 @@ echo ${1}
 sac "TEST2: Radio Jockey Modes"
 
 sac "Testing Theo mode classic, 20 seconds and 3 songs" #UPDATEME
-ossify hist2 20 3 1 0 ${HOME}/ossify_logs_test
+ossify hist2 20 3 1 0 ${HOME}/ossify_logs_test 0
 sac "Test end"
 
 sac "Testing Theo mode armin, 20 seconds and 3 songs" #UPDATEME
-ossify hist3 20 3 2 0 ${HOME}/ossify_logs_test
+ossify hist3 20 3 2 0 ${HOME}/ossify_logs_test 0
 sac "Test end"
 
 sac "Testing Theo mode fyi, 20 seconds and 3 songs" #UPDATEME
-ossify hist4 20 3 3 0 ${HOME}/ossify_logs_test
+ossify hist4 20 3 3 0 ${HOME}/ossify_logs_test 0
 sac "Test end"
 
 #
 sac "TEST3: Skip Time Modes"
 
 sac "Testing Full song mode, 3 songs fyi" #UPDATEME
-ossify hist5 f 3 3 0 ${HOME}/ossify_logs_test
+ossify hist5 f 3 3 0 ${HOME}/ossify_logs_test 0
 sac "Test end"
 
 sac "Testing Random skip mode, 3 songs fyi" #UPDATEME
-ossify hist6 r 3 3 0 ${HOME}/ossify_logs_test
+ossify hist6 r 3 3 0 ${HOME}/ossify_logs_test 0
 sac "Test end"
 
 # test exit after play

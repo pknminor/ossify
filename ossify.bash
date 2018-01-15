@@ -50,27 +50,54 @@ function ossify_pause_at_next_start() {
 }
 
 # pause after skip time, variation of pause_after_full_song
-function ossify_pause_after_skip_time() {
-    while [ 1 ]
-    do
+# function ossify_pause_after_skip_time() {
+#     while [ 1 ]
+#     do
+#         local ossify_song_skip_time=${1}
+#         local ossify_seconds_played_int=$(ossify_f2i "`spotify info |  sed -n 's/Seconds played:[[:space:]]*\(.*\)/\1/p'`")
+#         local ossify_song_info_seconds=`spotify info | sed -n 's/Seconds:[[:space:]]*\(.*\)/\1/p'`
+#         local ossify_song_info_seconds_post=`bc <<< "scale=2; ${ossify_song_info_seconds}/1000"`
+#         local ossify_song_info_seconds_int=$(ossify_f2i $ossify_song_info_seconds_post)
+#         local ossify_seconds_left=$(( $ossify_song_skip_time - $ossify_seconds_played_int ))
+#         local ossify_seconds_left_thresh=1
+#         ossify_dp "OSSIFY_PAUSE_AFTER_SKIP_TIME: ossify_seconds_left $ossify_seconds_left ossify_song_info_seconds_int $ossify_song_info_seconds_int ossify_seconds_played_int $ossify_seconds_played_int  ossify_song_info_seconds $ossify_song_info_seconds\n"
+#         if [ $ossify_seconds_left -lt $ossify_seconds_left_thresh ] || [ $ossify_seconds_played_int -gt $ossify_song_skip_time ]
+#         then
+#             ossify_dp "OSSIFY_PAUSE_AFTER_SKIP_TIME: ossify_seconds_left $ossify_seconds_left is less than the threshold ossify_seconds_left_thresh $ossify_seconds_left_thresh\n"
+#             ossify_dp "OSSIFY_PAUSE_AFTER_SKIP_TIME: going to next and pausing playback"
+#             spotify next > /dev/null
+#             spotify pause > /dev/null
+#             break
+#         fi
+#         ossify_poll_sleep
+#     done
+# }
+
+function ossify_pause_after_skip_time_read() {
         local ossify_song_skip_time=${1}
+        local ossify_song_skip_time_wo_crossfade=$(( $1 - 3))
         local ossify_seconds_played_int=$(ossify_f2i "`spotify info |  sed -n 's/Seconds played:[[:space:]]*\(.*\)/\1/p'`")
         local ossify_song_info_seconds=`spotify info | sed -n 's/Seconds:[[:space:]]*\(.*\)/\1/p'`
         local ossify_song_info_seconds_post=`bc <<< "scale=2; ${ossify_song_info_seconds}/1000"`
         local ossify_song_info_seconds_int=$(ossify_f2i $ossify_song_info_seconds_post)
         local ossify_seconds_left=$(( $ossify_song_skip_time - $ossify_seconds_played_int ))
         local ossify_seconds_left_thresh=1
-        ossify_dp "OSSIFY_PAUSE_AFTER_SKIP_TIME: ossify_seconds_left $ossify_seconds_left ossify_song_info_seconds_int $ossify_song_info_seconds_int ossify_seconds_played_int $ossify_seconds_played_int  ossify_song_info_seconds $ossify_song_info_seconds\n"
-        if [ $ossify_seconds_left -lt $ossify_seconds_left_thresh ] || [ $ossify_seconds_played_int -gt $ossify_song_skip_time ]
-        then
-            ossify_dp "OSSIFY_PAUSE_AFTER_SKIP_TIME: ossify_seconds_left $ossify_seconds_left is less than the threshold ossify_seconds_left_thresh $ossify_seconds_left_thresh\n"
-            ossify_dp "OSSIFY_PAUSE_AFTER_SKIP_TIME: going to next and pausing playback"
-            spotify next > /dev/null
-            spotify pause > /dev/null
-            break
-        fi
-        ossify_poll_sleep
-    done
+        #echo "\n\npress any key to move to the next song :"
+        #read -t $ossify_song_skip_time -n 1 answer
+        # if [ $? == 0 ]; then
+        #     echo "Your answer is: $answer"
+        # fi
+        read -t $ossify_song_skip_time_wo_crossfade
+        # simulate crossfade
+        osascript -e "set volume output volume (output volume of (get volume settings) - 10) --100%"
+        sleep 1s
+        osascript -e "set volume output volume (output volume of (get volume settings) - 10) --100%"
+        sleep 1s
+        osascript -e "set volume output volume (output volume of (get volume settings) - 10) --100%"
+        sleep 1s
+
+        spotify next > /dev/null
+        spotify pause > /dev/null
 }
 
 # main
@@ -83,18 +110,21 @@ function ossify() {
     OSSIFY_THEO_MODE=${4}
     OSSIFY_QUIT_AFTER=${5}
     OSSIFY_OUT_LOC=${6}
+    OSSIFY_NO_ARTIST=${7}
     OSSIFY_ARMIN_DELAY=6
     OSSIFY_MIN_PLAY_LENGTH=30
 
-    if [ -z $OSSIFY_SKIP_TIME ] || [ -z $OSSIFY_PLAYLIST_NAME ] || [ -z $OSSIFY_NUM_SONGS ] || [ -z $OSSIFY_THEO_MODE ] || [ -z $OSSIFY_QUIT_AFTER ] || [ -z $OSSIFY_OUT_LOC ]
-    then
-        OSSIFY_PLAYLIST_NAME="UNKNOWN_ARTIST"
-        OSSIFY_SKIP_TIME=30
-        OSSIFY_NUM_SONGS=56
-        OSSIFY_THEO_MODE=1
-        OSSIFY_QUIT_AFTER=0
-        OSSIFY_OUT_LOC="${HOME}/ossify_logs"
-    fi
+    # IMPROVEME : individual defaults
+    # if [ -z $OSSIFY_SKIP_TIME ] || [ -z $OSSIFY_PLAYLIST_NAME ] || [ -z $OSSIFY_NUM_SONGS ] || [ -z $OSSIFY_THEO_MODE ] || [ -z $OSSIFY_QUIT_AFTER ] || [ -z $OSSIFY_OUT_LOC ] || [ -z $OSSIFY_NO_ARTIST]
+    # then
+    #     OSSIFY_PLAYLIST_NAME="UNKNOWN_ARTIST"
+    #     OSSIFY_SKIP_TIME=30
+    #     OSSIFY_NUM_SONGS=56
+    #     OSSIFY_THEO_MODE=1
+    #     OSSIFY_QUIT_AFTER=0
+    #     OSSIFY_OUT_LOC="${HOME}/ossify_logs"
+    #     OSSIFY_NO_ARTIST=0
+    # fi
 
     ossify_dp "
         OSSIFY_PLAYLIST_NAME: ${OSSIFY_PLAYLIST_NAME} \n \
@@ -158,7 +188,7 @@ function ossify() {
     do
 
         # get info
-        OSSIFY_SONG_NAME=`spotify info |  sed -n 's/Track:[[:space:]]*\(.*\)/\1/p'`
+        OSSIFY_SONG_NAME=`spotify info |  sed -n 's/Track:[[:space:]]*\(.*\)/\1/p' | sed "s/[-(/].*//"`
         OSSIFY_AARTIST=`spotify info | sed -n 's/Album Artist:[[:space:]]*\(.*\)/\1/p'`
         OSSIFY_SONG_INFO_SECONDS=`spotify info | sed -n 's/Seconds:[[:space:]]*\(.*\)/\1/p'`
         OSSIFY_SONG_SECONDS=`bc <<< "scale=2; ${OSSIFY_SONG_INFO_SECONDS}/1000"`
@@ -173,7 +203,13 @@ function ossify() {
         echo "--------------------------"                                             >> ${OSSIFY_OUT_FILE}
         echo "----END-OF-TRACK----------"                                             >> ${OSSIFY_OUT_FILE}
 
-        OSSIFY_TRACK_INFO_SIMPLE="${OSSIFY_SONG_NAME} by ${OSSIFY_AARTIST}"
+        if [ $OSSIFY_NO_ARTIST -eq 1 ]
+        then
+          OSSIFY_TRACK_INFO_SIMPLE="${OSSIFY_SONG_NAME}"
+        else
+          OSSIFY_TRACK_INFO_SIMPLE="${OSSIFY_SONG_NAME} by ${OSSIFY_AARTIST}"
+        fi
+
         echo "SONG ${VAR}/${OSSIFY_NUM_SONGS}"
         echo "${OSSIFY_TRACK_INFO_SIMPLE}"
 
@@ -210,8 +246,9 @@ function ossify() {
             then
                 ossify_pause_at_next_start
             else
-                ossify_pause_after_skip_time $OSSIFY_SKIP_TIME
+                ossify_pause_after_skip_time_read $OSSIFY_SKIP_TIME
             fi
+            ossify_vol_up_30
 
         # overlapped beginning
         elif [ $OSSIFY_THEO_MODE -eq 2 ]
@@ -226,8 +263,9 @@ function ossify() {
             then
                 ossify_pause_at_next_start
             else
-                ossify_pause_after_skip_time $OSSIFY_SKIP_TIME
+                ossify_pause_after_skip_time_read $OSSIFY_SKIP_TIME
             fi
+            ossify_vol_up_30
 
         elif [ $OSSIFY_THEO_MODE -eq 3 ]
         then
@@ -238,10 +276,11 @@ function ossify() {
             then
                 ossify_pause_at_next_start
             else
-                ossify_pause_after_skip_time $OSSIFY_SKIP_TIME
+                ossify_pause_after_skip_time_read $OSSIFY_SKIP_TIME
             fi
+            ossify_vol_up_30
 
-            ossify_theo_said "For your information that was, $OSSIFY_TRACK_INFO_SIMPLE"
+            ossify_theo_said "that was, $OSSIFY_TRACK_INFO_SIMPLE"
 
         elif [ $OSSIFY_THEO_MODE -eq 0 ]
         then
@@ -252,8 +291,10 @@ function ossify() {
             then
                 ossify_pause_at_next_start
             else
-                ossify_pause_after_skip_time $OSSIFY_SKIP_TIME
+                ossify_pause_after_skip_time_read $OSSIFY_SKIP_TIME
             fi
+            ossify_vol_up_30
+
         fi
 
         # dbg print
@@ -285,6 +326,7 @@ function ossify_dp() {
     if [ $OSSIFY_DEBUG ]
     then
       printf "\n${1}\n"
+      echo "\n${1}\n"
     fi
 }
 
@@ -296,8 +338,12 @@ function ossify_dp1() {
 }
 
 function ossify_theo_said() {
+    osascript -e "set volume output volume (output volume of (get volume settings) - 30) --100%"
     ossify_dp "THEO_SAYS: ${1}"
     say $1
+    osascript -e "set volume output volume (output volume of (get volume settings) + 30) --100%"
 }
 
-
+function ossify_vol_up_30() {
+    osascript -e "set volume output volume (output volume of (get volume settings) + 30) --100%"
+ }
