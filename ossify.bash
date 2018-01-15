@@ -149,7 +149,8 @@ function ossify() {
     elif [ ${OSSIFY_THEO_MODE} -eq 3 ]
     then
         ossify_theo_said "Ossify, FYI mode"
-    else
+    elif [ ${OSSIFY_THEO_MODE} -eq 4 ]
+    then
         ossify_theo_said "Ossify, Quiet mode"
     fi
 
@@ -242,7 +243,7 @@ function ossify() {
 
             ossify_theo_said "For your information that was, $OSSIFY_TRACK_INFO_SIMPLE"
 
-        elif [ $OSSIFY_THEO_MODE -eq 4 ]
+        elif [ $OSSIFY_THEO_MODE -eq 0 ]
         then
             ossify_dp "OSSIFY: THEO OFF MODE"
             spotify play > /dev/null
