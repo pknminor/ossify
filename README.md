@@ -29,13 +29,13 @@ Change songs after a certain (or) random amount of time, get artist and song inf
 > > 
 > >  Usage:
 >
-> >      ossify <playlist-name> <time-per-play> <number-of-plays> <Announcer-mode> <exit> <log-location>
+> >      ossify <playlist-name> <time-per-play> <number-of-plays> <Announcer-mode> <Announcer-aritist> <crossfade> <exit-after> <log-location>
 >
 > >      <playlist-name>      = playlist name
-> >      <time-per-play>      = (0-180), seconds
+> >      <time-per-play>      = 1 to <song-length>, in seconds
 > >                             f, full song
 > >                             r, random switch
-> >      <number-of-songs>    = >0
+> >      <number-of-songs>    = 1 - 100, songs
 > >      <Announcer-mode>     = "peel", classic, Announcer speaks before play
 > >                             "armin", Announcer speaks during play at the begining
 > >                             "fyi", Announcer speaks at the end of play
@@ -43,9 +43,9 @@ Change songs after a certain (or) random amount of time, get artist and song inf
 > >      <Announcer-artist>   = Announcer mentions artist name
 > >      <crossfade>          = on, turn on crossfade
 > >                             off, turn off crossfade
-> >      <exit>               = 0, pause after
-> >                             1, quit after
-> >      <log-location>       = play history file, default is $HOME/ossify_logs
+> >      <exit>               = on, quit after
+> >                             off, pause after
+> >      <log-location>       = history file folder, default is $HOME/ossify_logs
 >
 >     ossify will write out your listening history. eg. ramones_04-15-16-17:54:10.txt for your future reference.
 
