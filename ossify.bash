@@ -234,8 +234,8 @@ function ossify() {
             fi
 
             OSSIFY_RAND_DIFF=`bc <<< "scale=2; ${OSSIFY_RAND_MAX}-${OSSIFY_RAND_MIN}+1"`
-            OSSIFY_RANDOM_DIFF=$(($RANDOM%${OSSIFY_RAND_DIFF}))
-            OSSIFY_RAND_SKIP_TIME=`bc <<< "scale=2; ${OSSIFY_RAND_MIN}+$OSSIFY_RANDOM_DIFF"`
+            OSSIFY_RAND_DIFF=$(($RANDOM%${OSSIFY_RAND_DIFF}))
+            OSSIFY_RAND_SKIP_TIME=`bc <<< "scale=2; ${OSSIFY_RAND_MIN}+$OSSIFY_RAND_DIFF"`
             OSSIFY_SKIP_TIME=$(ossify_f2i ${OSSIFY_RAND_SKIP_TIME})
             ossify_dp1 "OSSIFY: OSSIFY_SKIP_TIME $OSSIFY_SKIP_TIME OSSIFY_RAND_SKIP_TIME $OSSIFY_RAND_SKIP_TIME"
         fi
