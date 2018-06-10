@@ -75,6 +75,7 @@ function ossify_pause_at_next_start() {
 
 function ossify_pause_after_skip_time_read() {
         local ossify_song_skip_time=${1}
+        local ossify_crossfade=${2}
         local ossify_song_skip_time_wo_crossfade=$(( $1 - 3))
         local ossify_seconds_played_int=$(ossify_f2i "`spotify info |  sed -n 's/Seconds played:[[:space:]]*\(.*\)/\1/p'`")
         local ossify_song_info_seconds=`spotify info | sed -n 's/Seconds:[[:space:]]*\(.*\)/\1/p'`
@@ -84,18 +85,15 @@ function ossify_pause_after_skip_time_read() {
         local ossify_seconds_left_thresh=1
         #echo "\n\npress any key to move to the next song :"
         #read -t $ossify_song_skip_time -n 1 answer
-        # if [ $? == 0 ]; then
+        # if [ $? = 0 ]; then
         #     echo "Your answer is: $answer"
         # fi
         read -t $ossify_song_skip_time_wo_crossfade
         # simulate crossfade
-        osascript -e "set volume output volume (output volume of (get volume settings) - 10) --100%"
-        sleep 1s
-        osascript -e "set volume output volume (output volume of (get volume settings) - 10) --100%"
-        sleep 1s
-        osascript -e "set volume output volume (output volume of (get volume settings) - 10) --100%"
-        sleep 1s
-
+        if [ "$ossify_crossfade" = "on" ]
+        then
+                ossify_crossfade_out
+        fi
         spotify next > /dev/null
         spotify pause > /dev/null
 }
@@ -108,9 +106,13 @@ function ossify() {
     OSSIFY_SKIP_TIME_ARGS="${2}"
     OSSIFY_NUM_SONGS=${3}
     OSSIFY_THEO_MODE=${4}
-    OSSIFY_QUIT_AFTER=${5}
-    OSSIFY_OUT_LOC=${6}
-    OSSIFY_NO_ARTIST=${7}
+    OSSIFY_THEO_ARTIST=${5}
+    OSSIFY_CROSSFADE=${6}
+    OSSIFY_QUIT_AFTER=${7}
+    OSSIFY_OUT_LOC=${8}
+
+
+    # defaults
     OSSIFY_ARMIN_DELAY=6
     OSSIFY_MIN_PLAY_LENGTH=30
 
@@ -127,12 +129,15 @@ function ossify() {
     # fi
 
     ossify_dp "
-        OSSIFY_PLAYLIST_NAME: ${OSSIFY_PLAYLIST_NAME} \n \
-        OSSIFY_SKIP_TIME:     ${OSSIFY_SKIP_TIME}     \n \
-        OSSIFY_NUM_SONGS:     ${OSSIFY_NUM_SONGS}     \n \
-        OSSIFY_THEO_MODE:     ${OSSIFY_THEO_MODE}     \n \
-        OSSIFY_QUIT_AFTER:    ${OSSIFY_QUIT_AFTER}    \n \
-        OSSIFY_OUT_LOC:       ${OSSIFY_OUT_LOC}       \n \
+        OSSIFY_PLAYLIST_NAME:     ${OSSIFY_PLAYLIST_NAME} \n \
+        OSSIFY_SKIP_TIME:         ${OSSIFY_SKIP_TIME} \n \
+        OSSIFY_SKIP_TIME_ARGS:    ${OSSIFY_SKIP_TIME_ARGS} \n \
+        OSSIFY_NUM_SONGS:         ${OSSIFY_NUM_SONGS} \n \
+        OSSIFY_THEO_MODE:         ${OSSIFY_THEO_MODE} \n \
+        OSSIFY_THEO_ARTIST:       ${OSSIFY_THEO_ARTIST} \n \
+        OSSIFY_QUIT_AFTER:        ${OSSIFY_QUIT_AFTER} \n \
+        OSSIFY_CROSSFADE:         ${OSSIFY_CROSSFADE} \n \
+        OSSIFY_OUT_LOC:           ${OSSIFY_OUT_LOC} \n \
         "
 
     # output log
@@ -155,7 +160,9 @@ function ossify() {
     echo "OSSIFY_SKIP_TIME:     ${OSSIFY_SKIP_TIME}"         >> ${OSSIFY_OUT_FILE}
     echo "OSSIFY_NUM_SONGS:     ${OSSIFY_NUM_SONGS}"         >> ${OSSIFY_OUT_FILE}
     echo "OSSIFY_THEO_MODE:     ${OSSIFY_THEO_MODE}"         >> ${OSSIFY_OUT_FILE}
+    echo "OSSIFY_THEO_ARTIST:   ${OSSIFY_THEO_ARTIST}"         >> ${OSSIFY_OUT_FILE}
     echo "OSSIFY_QUIT_AFTER:    ${OSSIFY_QUIT_AFTER}"        >> ${OSSIFY_OUT_FILE}
+    echo "OSSIFY_CROSSFADE:     ${OSSIFY_CROSSFADE}"         >> ${OSSIFY_OUT_FILE}
     echo "OSSIFY_OUT_LOC:       ${OSSIFY_OUT_LOC}"           >> ${OSSIFY_OUT_FILE}
     echo "--------------------------"                        >> ${OSSIFY_OUT_FILE}
 
@@ -170,16 +177,16 @@ function ossify() {
     spotify pause > /dev/null
 
     # intro message
-    if [ ${OSSIFY_THEO_MODE} -eq 1 ]
+    if [ "${OSSIFY_THEO_MODE}" = "peel" ]
     then
-        ossify_theo_said "Ossify, Classic Mode"
-    elif [ ${OSSIFY_THEO_MODE} -eq 2 ]
+        ossify_theo_said "Ossify, John Peel Mode"
+    elif [ "${OSSIFY_THEO_MODE}" = "armin" ]
     then
         ossify_theo_said "Ossify, Armin mode"
-    elif [ ${OSSIFY_THEO_MODE} -eq 3 ]
+    elif [ "${OSSIFY_THEO_MODE}" = "fyi" ]
     then
         ossify_theo_said "Ossify, FYI mode"
-    elif [ ${OSSIFY_THEO_MODE} -eq 4 ]
+    elif [ "${OSSIFY_THEO_MODE}" = "off" ]
     then
         ossify_theo_said "Ossify, Quiet mode"
     fi
@@ -203,17 +210,17 @@ function ossify() {
         echo "--------------------------"                                             >> ${OSSIFY_OUT_FILE}
         echo "----END-OF-TRACK----------"                                             >> ${OSSIFY_OUT_FILE}
 
-        if [ $OSSIFY_NO_ARTIST -eq 1 ]
+        if [ "$OSSIFY_THEO_ARTIST" = "on" ]
         then
-          OSSIFY_TRACK_INFO_SIMPLE="${OSSIFY_SONG_NAME}"
-        else
           OSSIFY_TRACK_INFO_SIMPLE="${OSSIFY_SONG_NAME} by ${OSSIFY_AARTIST}"
+        else
+          OSSIFY_TRACK_INFO_SIMPLE="${OSSIFY_SONG_NAME}"
         fi
 
         echo "SONG ${VAR}/${OSSIFY_NUM_SONGS}"
         echo "${OSSIFY_TRACK_INFO_SIMPLE}"
 
-        if [ $OSSIFY_SKIP_TIME_ARGS == "r" ]
+        if [ "$OSSIFY_SKIP_TIME_ARGS" = "r" ]
         then
             ossify_dp1 "OSSIFY: RANDOM TIME AUDIO PLAYBACK MODE"
 
@@ -235,23 +242,26 @@ function ossify() {
         ossify_dp "OSSIFY: OSSIFY_SKIP_TIME $OSSIFY_SKIP_TIME"
 
         # classic mode, before play
-        if [ $OSSIFY_THEO_MODE -eq 1 ]
+        if [ "$OSSIFY_THEO_MODE" = "peel" ]
         then
             ossify_dp "OSSIFY: CLASSIC MODE"
             #
             ossify_theo_said "$OSSIFY_TRACK_INFO_SIMPLE"
             spotify play > /dev/null
 
-            if [ $OSSIFY_SKIP_TIME_ARGS == "f" ]
+            if [ "$OSSIFY_SKIP_TIME_ARGS" = "f" ]
             then
                 ossify_pause_at_next_start
             else
-                ossify_pause_after_skip_time_read $OSSIFY_SKIP_TIME
+                ossify_pause_after_skip_time_read $OSSIFY_SKIP_TIME $OSSIFY_CROSSFADE
             fi
-            ossify_vol_up_30
+            if [ "$OSSIFY_CROSSFADE" = "on" ]
+            then
+                ossify_crossfade_in
+            fi
 
         # overlapped beginning
-        elif [ $OSSIFY_THEO_MODE -eq 2 ]
+        elif [ "$OSSIFY_THEO_MODE" = "armin" ]
         then
             ossify_dp "OSSIFY: ARMIN MODE"
             spotify play > /dev/null
@@ -259,41 +269,50 @@ function ossify() {
             ossify_sleep "$OSSIFY_ARMIN_DELAY"
             ossify_theo_said "$OSSIFY_TRACK_INFO_SIMPLE"
 
-            if [ $OSSIFY_SKIP_TIME_ARGS == "f" ]
+            if [ "$OSSIFY_SKIP_TIME_ARGS" = "f" ]
             then
                 ossify_pause_at_next_start
             else
                 ossify_pause_after_skip_time_read $OSSIFY_SKIP_TIME
             fi
-            ossify_vol_up_30
+            if [ "$OSSIFY_CROSSFADE" = "on" ]
+            then
+                ossify_crossfade_in
+            fi
 
-        elif [ $OSSIFY_THEO_MODE -eq 3 ]
+        elif [ "$OSSIFY_THEO_MODE" = "fyi" ]
         then
             ossify_dp "OSSIFY: FYI MODE"
             spotify play > /dev/null
 
-            if [ $OSSIFY_SKIP_TIME_ARGS == "f" ]
+            if [ "$OSSIFY_SKIP_TIME_ARGS" = "f" ]
             then
                 ossify_pause_at_next_start
             else
                 ossify_pause_after_skip_time_read $OSSIFY_SKIP_TIME
             fi
-            ossify_vol_up_30
+            if [ "$OSSIFY_CROSSFADE" = "on" ]
+            then
+                ossify_crossfade_in
+            fi
 
             ossify_theo_said "that was, $OSSIFY_TRACK_INFO_SIMPLE"
 
-        elif [ $OSSIFY_THEO_MODE -eq 0 ]
+        elif [ "$OSSIFY_THEO_MODE" = "off" ]
         then
             ossify_dp "OSSIFY: THEO OFF MODE"
             spotify play > /dev/null
 
-            if [ $OSSIFY_SKIP_TIME_ARGS == "f" ]
+            if [ "$OSSIFY_SKIP_TIME_ARGS" = "f" ]
             then
                 ossify_pause_at_next_start
             else
                 ossify_pause_after_skip_time_read $OSSIFY_SKIP_TIME
             fi
-            ossify_vol_up_30
+            if [ "$OSSIFY_CROSSFADE" = "on" ]
+            then
+                ossify_crossfade_in
+            fi
 
         fi
 
@@ -305,7 +324,6 @@ function ossify() {
             OSSIFY_SKIP_TIME    = ${OSSIFY_SKIP_TIME}       \n \
             OSSIFY_SONG_NAME    = ${OSSIFY_SONG_NAME}       \n \
             OSSIFY_AARTIST      = ${OSSIFY_AARTIST}         \n \
-            OSSIFY_THEO_MODE    = ${OSSIFY_THEO_MODE}       \n \
             OSSIFY_SONG_SECONDS = ${OSSIFY_SONG_SECONDS}    \n \
             ############################################### \n \
             "
@@ -315,7 +333,7 @@ function ossify() {
     echo "----END-------------------"    >> ${OSSIFY_OUT_FILE} # end of playbook
 
     #ossify_theo_said "Theo bidding off!"
-    if [ $OSSIFY_QUIT_AFTER -eq 1 ]
+    if [ "$OSSIFY_QUIT_AFTER" = "on" ]
     then
         ossify_theo_said "Theo bidding off!"
         spotify quit
@@ -344,6 +362,14 @@ function ossify_theo_said() {
     osascript -e "set volume output volume (output volume of (get volume settings) + 30) --100%"
 }
 
-function ossify_vol_up_30() {
+function ossify_crossfade_in() {
     osascript -e "set volume output volume (output volume of (get volume settings) + 30) --100%"
  }
+
+function ossify_crossfade_out() {
+    for VAR in `seq 1 15`
+    do
+        osascript -e "set volume output volume (output volume of (get volume settings) - 2) --100%"
+        sleep 0.2s
+    done
+}

@@ -25,25 +25,27 @@ Change songs after a certain (or) random amount of time, get artist and song inf
 > > 
 > >  number-of-songs: 30, time-per-play: 45, Announcer-mode: fyi
 > > 
-> >  ~: ossify ramones 45 30 3 0 ~/ossify_logs
+> >  ~: ossify ramones_play_list 45 30 3 0 ~/ossify_logs
 > > 
 > >  Usage:
 >
 > >      ossify <playlist-name> <time-per-play> <number-of-plays> <Announcer-mode> <exit> <log-location>
 >
-> >      <playlist-name>   = playlist name
-> >      <time-per-play>   = (0-180), seconds
-> >                          f, full song
-> >                          r, random switch
-> >      <number-of-songs> = >0
-> >      <Announcer-mode>  = 1, classic, Announcer speaks before play
-> >                          2, armin, Announcer speaks during play at the begining
-> >                          3, fyi, Announcer speaks at the end of play
-> >                          4, off, Announcer turned off
-> >      <exit>            = 0, pause after
-> >                          1, quit after
-> >      <log-location>    = play history file, default is $HOME/ossify_logs
->
+> >      <playlist-name>      = playlist name
+> >      <time-per-play>      = (0-180), seconds
+> >                             f, full song
+> >                             r, random switch
+> >      <number-of-songs>    = >0
+> >      <Announcer-mode>     = "peel", classic, Announcer speaks before play
+> >                             "armin", Announcer speaks during play at the begining
+> >                             "fyi", Announcer speaks at the end of play
+> >                             "off", Announcer turned off
+> >      <Announcer-artist>   = Announcer mentions artist name
+> >      <crossfade>          = on, turn on crossfade
+> >                             off, turn off crossfade
+> >      <exit>               = 0, pause after
+> >                             1, quit after
+> >      <log-location>       = play history file, default is $HOME/ossify_logs
 >
 >     ossify will write out your listening history. eg. ramones_04-15-16-17:54:10.txt for your future reference.
 
