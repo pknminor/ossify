@@ -8,7 +8,7 @@ Change songs after a certain (or) random amount of time, get artist and song inf
 # Prerequisites
 - https://github.com/hnarayanan/shpotify
 - osx
-- spotify(1.0.26.132.ga4e3ccee, premium recommended*)
+- spotify(1.0.26.132.ga4e3ccee, premium recommended)
 - bash(3.2)
 - optional: NoSleep(http://www.macupdate.com/app/mac/37991/nosleep)
 
