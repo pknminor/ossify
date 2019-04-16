@@ -25,7 +25,7 @@ Change songs after a certain (or) random amount of time, get artist and song inf
 > > 
 > >  number-of-songs: 30, time-per-play: 45, Announcer-mode: fyi
 > > 
-> >  ~: ossify ramones_play_list 45 30 3 0 ~/ossify_logs
+> >  ~: ossify playhist6 30 14 peel off off off ${HOME}/ossify_logs
 > > 
 > >  Usage:
 >
