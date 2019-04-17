@@ -1,16 +1,15 @@
 # ossify
 
 *ossify*, your Spotify listening companion, eases the *tedium* of music discovery and recollection.
-The idea is to automate the Radio Jockey experience and keep record of what you had listened to.
+The idea is to automate the Radio Jockey experience and keep a record of what you had listened to during your ossify session.
 
 Change songs after a certain (or) random amount of time, get artist and song information via audio feedback during song play.
 
 # Prerequisites
 - https://github.com/hnarayanan/shpotify
 - osx
-- spotify(1.0.26.132.ga4e3ccee, premium recommended*)
-- bash(3.2)
-- optional: NoSleep(http://www.macupdate.com/app/mac/37991/nosleep)
+- spotify(>1.0.26.132.ga4e3ccee, premium recommended)
+- bash(>3.2)
 
 # Instructions
 1. source ossify.bash from your ${HOME}/.bashrc
@@ -25,7 +24,7 @@ Change songs after a certain (or) random amount of time, get artist and song inf
 > > 
 > >  number-of-songs: 30, time-per-play: 45, Announcer-mode: fyi
 > > 
-> >  ~: ossify ramones_play_list 45 30 3 0 ~/ossify_logs
+> >  ~: ossify playhist6 30 14 peel off off off ${HOME}/ossify_logs
 > > 
 > >  Usage:
 >
