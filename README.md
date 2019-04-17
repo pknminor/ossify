@@ -9,9 +9,11 @@ Change songs after a certain (or) random amount of time, get artist and song inf
 - https://github.com/hnarayanan/shpotify
 - osx
 - spotify(>1.0.26.132.ga4e3ccee, premium recommended)
-- bash(>3.2)
+- python
 
 # Instructions
-
-
 ./ossify.py -s 30 -n 3 -q -a
+-s ; skip time
+-n ; number songs
+-a ; say the artist's name
+-q ; stop after songs
