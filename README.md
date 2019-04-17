@@ -12,8 +12,8 @@ Change songs after a certain (or) random amount of time, get artist and song inf
 - python
 
 # Instructions
-##./ossify.py -s 30 -n 3 -q -a
-### -s ; skip time
-### -n ; number songs
-### -a ; say the artist's name
-### -q ; stop after songs
+./ossify.py -s 30 -n 3 -q -a<br/>
+-s ; skip time<br/>
+-n ; number songs<br/>
+-a ; say the artist's name<br/>
+-q ; stop after songs<br/>
