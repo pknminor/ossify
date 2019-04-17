@@ -8,7 +8,7 @@ Change songs after a certain (or) random amount of time, get artist and song inf
 # Prerequisites
 - https://github.com/hnarayanan/shpotify
 - osx
-- spotify(>1.0.26.132.ga4e3ccee, premium recommended)
+- spotify
 - python
 
 # Instructions
