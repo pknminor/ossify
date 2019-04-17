@@ -1,9 +1,6 @@
 # ossify
 
-*ossify*, your Spotify listening companion, eases the *tedium* of music discovery and recollection.
-The idea is to automate the Radio Jockey experience and keep a record of what you had listened to during your ossify session.
-
-Change songs after a certain (or) random amount of time, get artist and song information via audio feedback during song play.
+Automatically move to next track after a certain amount of seconds, get artist and song information via audio feedback during song play.
 
 # Prerequisites
 - https://github.com/hnarayanan/shpotify
