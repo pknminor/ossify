@@ -13,7 +13,6 @@ function sac {
     echo ${1}
 }
 
-ossify hist6 r 2 peel off off off ${HOME}/ossify_logs_test
-
+ossify hist6 30 14 peel off off off ${HOME}/ossify_logs_test
 
 exit 0
