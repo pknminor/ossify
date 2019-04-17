@@ -1,0 +1,10 @@
+#!/bin/bash
+
+#
+source ossify.bash
+
+rm -rf ${1}_run.log
+
+source ${1} 2>&1 | tee -a out.log
+
+exit 0
