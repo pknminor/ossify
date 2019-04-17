@@ -13,3 +13,5 @@ Change songs after a certain (or) random amount of time, get artist and song inf
 
 # Instructions
 
+
+./ossify.py -s 30 -n 3 -q -a
