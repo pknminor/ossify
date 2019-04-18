@@ -9,8 +9,8 @@ Automatically move to next track after a certain amount of seconds, get artist a
 - python
 
 # Instructions
-./ossify.py -s 30 -n 3 -q -a<br/>
--s ; skip time<br/>
--n ; number songs<br/>
--a ; say the artist's name<br/>
--q ; stop after songs<br/>
+./ossify.py -s 30 -n 5 -q -a<br/>
+            -s ; skip time; 0:full-song, n:seconds skip<br/>
+            -n ; number songs<br/>
+            -a ; say the artist's name<br/>
+            -q ; stop after songs<br/>
