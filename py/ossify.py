@@ -108,14 +108,14 @@ def main(argv):
         print "Playing track " + str(ii) + "/" + str(num_songs)
         rj_says_track_bk(say_artist)
 
-        print "Hit Ctrl-C to go to next track"
+        print "Hit Ctrl-c to go to next track"
         try:
             time.sleep (skip_time)
         except KeyboardInterrupt:
             pass
 
         if (stop_after and (ii == num_songs)):
-            spot("pause")
+            spot("stop")
         else:
             spot("next")
 
