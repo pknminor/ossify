@@ -81,7 +81,7 @@ def main(argv):
     skip_time = 10
     num_songs = 10
     say_artist = False
-    stop_after = True
+    stop_after = False
     try:
         opts, args = getopt.getopt(argv,"ahs:n:q")
     except getopt.GetoptError:
