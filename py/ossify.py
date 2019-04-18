@@ -54,6 +54,14 @@ def get_track():
     output_split2 = re.split(".*: +", output_split[2])
     return output_split2[1]
 
+def get_track_seconds():
+    p = Popen(['spotify', 'info'], stdin=PIPE, stdout=PIPE, stderr=PIPE)
+    output, err = p.communicate(b"input data that is passed to subprocess' stdin")
+    rc = p.returncode
+    output_split = re.split("\n", output)
+    output_split2 = re.split(".*: +", output_split[5])
+    return int(float(output_split2[1]))
+
 def rj_says_track_info(say_artist):
     if (say_artist):
         rj_says(get_track() + "... by" + get_artist())
@@ -83,7 +91,7 @@ def main(argv):
         if opt == '-h':
             print """
             HELP:
-            -s ; skip time
+            -s ; skip time; 0:full-song, n:seconds skip
             -n ; number songs
             -a ; say the artist's name
             -q ; stop after songs
@@ -106,14 +114,25 @@ def main(argv):
     # main loop
     for ii in range(1,num_songs+1):
         print "Playing track " + str(ii) + "/" + str(num_songs)
+
+        # announcer
         rj_says_track_bk(say_artist)
 
+        # play full song or not
+        track_seconds = get_track_seconds() - 3
+        if (skip_time == 0):
+            skip_time_use = track_seconds
+        else:
+            skip_time_use = skip_time
+
+        # timer with exit
         print "Hit Ctrl-c to go to next track"
         try:
-            time.sleep (skip_time)
+            time.sleep (skip_time_use)
         except KeyboardInterrupt:
             pass
 
+        # end game
         if (stop_after and (ii == num_songs)):
             spot("stop")
         else:
