@@ -1,51 +1,16 @@
 # ossify
 
-*ossify*, your Spotify listening companion, eases the *tedium* of music discovery and recollection.
-The idea is to automate the Radio Jockey experience and keep a record of what you had listened to during your ossify session.
-
-Change songs after a certain (or) random amount of time, get artist and song information via audio feedback during song play.
+Automatically move to next track after a certain amount of seconds, get artist and song information via audio feedback during song play.
 
 # Prerequisites
 - https://github.com/hnarayanan/shpotify
 - osx
-- spotify(>1.0.26.132.ga4e3ccee, premium recommended)
-- bash(>3.2)
+- spotify
+- python
 
 # Instructions
-1. source ossify.bash from your ${HOME}/.bashrc
-
-2. running ossify
-
->  1. Start a playlist or an artist page on the Spotify GUI, with or without shuffle.
->
->  2. Launch ossify from the terminal.
->
-> >  For example,
-> > 
-> >  number-of-songs: 30, time-per-play: 45, Announcer-mode: fyi
-> > 
-> >  ~: ossify playhist6 30 14 peel off off off ${HOME}/ossify_logs
-> > 
-> >  Usage:
->
-> >      ossify <playlist-name> <time-per-play> <number-of-plays> <Announcer-mode> <Announcer-aritist> <crossfade> <exit-after> <log-location>
->
-> >      <playlist-name>      = playlist name
-> >      <time-per-play>      = 1 to <song-length>, in seconds
-> >                             f, full song
-> >                             r, random switch
-> >      <number-of-songs>    = 1 - 100, songs
-> >      <Announcer-mode>     = "peel", classic, Announcer speaks before play
-> >                             "armin", Announcer speaks during play at the begining
-> >                             "fyi", Announcer speaks at the end of play
-> >                             "off", Announcer turned off
-> >      <Announcer-artist>   = Announcer mentions artist name
-> >      <crossfade>          = on, turn on crossfade
-> >                             off, turn off crossfade
-> >      <exit>               = on, quit after
-> >                             off, pause after
-> >      <log-location>       = history file folder, default is $HOME/ossify_logs
->
->     ossify will write out your listening history. eg. ramones_04-15-16-17:54:10.txt for your future reference.
-
-## Have fun!
+./ossify.py -s 30 -n 3 -q -a<br/>
+-s ; skip time<br/>
+-n ; number songs<br/>
+-a ; say the artist's name<br/>
+-q ; stop after songs<br/>
